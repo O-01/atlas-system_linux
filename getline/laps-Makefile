@@ -1,0 +1,11 @@
+CC := gcc
+CFLAGS := -Werror -Wall -Wextra -pedantic
+SRC := 0-main.c laps.c
+HEAD := laps.h
+OBJ := $(SRC: %.c = %.o)
+NAME := laps
+
+all: $(OBJ)
+	$(CC) $(CFLAGS) $^ -o $(NAME)
+
+$(SRC): $(HEAD)
