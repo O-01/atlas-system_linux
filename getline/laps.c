@@ -18,10 +18,8 @@ void race_state(int *id, size_t size)
 		free_race_state();
 		return;
 	}
-
 	for (iter = 0; iter != size; iter++)
 		id_processing(id[iter]);
-
 	print_state();
 }
 
@@ -30,7 +28,7 @@ void race_state(int *id, size_t size)
  * @id: competitor id which to add / increase lap count
 */
 
-void id_processing(int id)
+void id_processing(const int id)
 {
 	racecar *tmp = head;
 	int found = 0;
@@ -42,7 +40,6 @@ void id_processing(int id)
 			tmp->laps++;
 			return;
 		}
-
 	if (!found)
 		add_racecar(id);
 }
@@ -52,14 +49,13 @@ void id_processing(int id)
  * @id: competitor id
 */
 
-void add_racecar(int id)
+void add_racecar(const int id)
 {
 	racecar *add, *tmp = head;
 
 	add = malloc(sizeof(racecar));
 	add->id = id;
 	add->laps = 0;
-
 	if (!head)
 	{
 		add->next = NULL;
@@ -112,13 +108,13 @@ void free_race_state(void)
 
 	if (!head)
 		return;
-
-	for (; tmp; tmp = head->next)
-	{
-		tmp = head->next;
-		free(head);
-		head = tmp;
-	}
+	else if (head->next)
+		for (; tmp; tmp = head->next)
+		{
+			tmp = head->next;
+			free(head);
+			head = tmp;
+		}
 	free(head);
 	head = NULL;
 }

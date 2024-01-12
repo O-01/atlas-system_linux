@@ -8,7 +8,6 @@
 
 int main(void)
 {
-
 	int ids1[3] = {1, 42, 101};
 	int ids2[1] = {11};
 
