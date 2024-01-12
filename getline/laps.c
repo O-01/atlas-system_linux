@@ -44,7 +44,7 @@ void id_processing(int id)
 		}
 
 	if (!found)
-		new_racecar(id);
+		add_racecar(id);
 }
 
 /**
