@@ -9,6 +9,6 @@ all: $(OBJ)
 	$(CC) $(CFLAGS) $^ -o $(NAME)
 
 debug: $(OBJ)
-	$(CC) $(CFLAGS) $^ -g -o $(NAME)
+	$(CC) $(CFLAGS) $^ -g -o $(NAME)-debug
 
 $(SRC): $(HEAD)
