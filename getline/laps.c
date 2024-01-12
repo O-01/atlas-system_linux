@@ -113,11 +113,12 @@ void free_race_state(void)
 	if (!head)
 		return;
 
-	for (; tmp; tmp = tmp->next)
+	for (; tmp; tmp = head->next)
 	{
-		head = tmp->next;
-		free(tmp);
-		tmp = head;
+		tmp = head->next;
+		free(head);
+		head = tmp;
 	}
+	free(head);
 	head = NULL;
 }

@@ -8,4 +8,7 @@ NAME := laps
 all: $(OBJ)
 	$(CC) $(CFLAGS) $^ -o $(NAME)
 
+debug: $(OBJ)
+	$(CC) $(CFLAGS) $^ -g -o $(NAME)
+
 $(SRC): $(HEAD)
