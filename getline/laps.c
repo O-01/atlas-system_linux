@@ -9,13 +9,14 @@
 void race_state(int *id, size_t size)
 {
 	static racecar *list;
+	size_t iter = 0;
 
 	if (size == 0 || !id)
 	{
 		free_race_state(&list);
 		return;
 	}
-	for (size_t iter = 0; iter != size; iter++)
+	for (; iter != size; iter++)
 		id_processing(&list, id[iter]);
 	print_state(list);
 }
@@ -28,9 +29,10 @@ void race_state(int *id, size_t size)
 
 void id_processing(racecar **list, const int id)
 {
+	racecar *tmp = *list;
 	int found = 0;
 
-	for (racecar *tmp = *list; tmp; tmp = tmp->next)
+	for (; tmp; tmp = tmp->next)
 		if (tmp->id == id)
 		{
 			found = 1;
@@ -49,7 +51,7 @@ void id_processing(racecar **list, const int id)
 
 void add_racecar(racecar **list, const int id)
 {
-	racecar *add = NULL;
+	racecar *add = NULL, *tmp = *list;
 
 	add = malloc(sizeof(racecar));
 	if (!add)
@@ -72,7 +74,7 @@ void add_racecar(racecar **list, const int id)
 			*list = add;
 		}
 		else
-			for (racecar *tmp = *list; tmp; tmp = tmp->next)
+			for (; tmp; tmp = tmp->next)
 				if (id > tmp->id)
 				{
 					if (tmp->next && id > tmp->next->id)
@@ -95,8 +97,10 @@ void add_racecar(racecar **list, const int id)
 
 void print_state(racecar *list)
 {
+	racecar *tmp = list;
+
 	printf("Race state:\n");
-	for (racecar *tmp = list; tmp; tmp = tmp->next)
+	for (; tmp; tmp = tmp->next)
 		printf("Car %d [%d laps]\n", tmp->id, tmp->laps);
 }
 
@@ -107,10 +111,12 @@ void print_state(racecar *list)
 
 void free_race_state(racecar **list)
 {
+	racecar *tmp = *list;
+
 	if (!*list)
 		return;
 	else if ((*list)->next)
-		for (racecar *tmp = *list; tmp; tmp = (*list)->next)
+		for (; tmp; tmp = (*list)->next)
 		{
 			tmp = (*list)->next;
 			free(*list);
