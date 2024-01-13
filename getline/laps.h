@@ -21,9 +21,9 @@ typedef struct race_car
 } racecar;
 
 void race_state(int *id, size_t size);
-void id_processing(int id);
-void add_racecar(int id);
-void print_state(void);
-void free_race_state(void);
+void id_processing(racecar **list, const int id);
+void add_racecar(racecar **list, const int id);
+void print_state(racecar *list);
+void free_race_state(racecar **list);
 
 #endif

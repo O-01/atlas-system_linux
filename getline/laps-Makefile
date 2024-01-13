@@ -11,4 +11,6 @@ all: $(OBJ)
 debug: $(OBJ)
 	$(CC) $(CFLAGS) $^ -g -o $(NAME)-debug
 
+.PHONY: debug
+
 $(SRC): $(HEAD)

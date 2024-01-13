@@ -1,8 +1,5 @@
 #include "laps.h"
 
-
-racecar *head;
-
 /**
  * race_state - keeps track of number of laps made by several cars in a race
  * @id: competitor id array
@@ -11,29 +8,29 @@ racecar *head;
 
 void race_state(int *id, size_t size)
 {
-	size_t iter = 0;
+	static racecar *list;
 
 	if (size == 0 || !id)
 	{
-		free_race_state();
+		free_race_state(&list);
 		return;
 	}
-	for (iter = 0; iter != size; iter++)
-		id_processing(id[iter]);
-	print_state();
+	for (size_t iter = 0; iter != size; iter++)
+		id_processing(&list, id[iter]);
+	print_state(list);
 }
 
 /**
  * id_processing - add new racecars / increase racecar laps, as applicable
+ * @list: list of racecars to be checked against input id
  * @id: competitor id which to add / increase lap count
 */
 
-void id_processing(const int id)
+void id_processing(racecar **list, const int id)
 {
-	racecar *tmp = head;
 	int found = 0;
 
-	for (; tmp; tmp = tmp->next)
+	for (racecar *tmp = *list; tmp; tmp = tmp->next)
 		if (tmp->id == id)
 		{
 			found = 1;
@@ -41,35 +38,41 @@ void id_processing(const int id)
 			return;
 		}
 	if (!found)
-		add_racecar(id);
+		add_racecar(list, id);
 }
 
 /**
  * add_racecar - add new racecar to racecar list
+ * @list: list of racecars to which new racecar added having input id
  * @id: competitor id
 */
 
-void add_racecar(const int id)
+void add_racecar(racecar **list, const int id)
 {
-	racecar *add, *tmp = head;
+	racecar *add = NULL;
 
 	add = malloc(sizeof(racecar));
+	if (!add)
+	{
+		free(add);
+		return;
+	}
 	add->id = id;
 	add->laps = 0;
-	if (!head)
+	if (!*list)
 	{
 		add->next = NULL;
-		head = add;
+		*list = add;
 	}
 	else
 	{
-		if (id < head->id)
+		if (id < (*list)->id)
 		{
-			add->next = head;
-			head = add;
+			add->next = *list;
+			*list = add;
 		}
 		else
-			for (; tmp; tmp = tmp->next)
+			for (racecar *tmp = *list; tmp; tmp = tmp->next)
 				if (id > tmp->id)
 				{
 					if (tmp->next && id > tmp->next->id)
@@ -87,34 +90,32 @@ void add_racecar(const int id)
 
 /**
  * print_state - print race state & lap count for each racecar
+ * @list: list of racecars of which to print status
 */
 
-void print_state(void)
+void print_state(racecar *list)
 {
-	racecar *tmp = head;
-
 	printf("Race state:\n");
-	for (; tmp; tmp = tmp->next)
+	for (racecar *tmp = list; tmp; tmp = tmp->next)
 		printf("Car %d [%d laps]\n", tmp->id, tmp->laps);
 }
 
 /**
  * free_race_state - free allocated memory related to race_state
+ * @list: list of racecars whose allocated memory is to be freed
 */
 
-void free_race_state(void)
+void free_race_state(racecar **list)
 {
-	racecar *tmp = head;
-
-	if (!head)
+	if (!*list)
 		return;
-	else if (head->next)
-		for (; tmp; tmp = head->next)
+	else if ((*list)->next)
+		for (racecar *tmp = *list; tmp; tmp = (*list)->next)
 		{
-			tmp = head->next;
-			free(head);
-			head = tmp;
+			tmp = (*list)->next;
+			free(*list);
+			*list = tmp;
 		}
-	free(head);
-	head = NULL;
+	free(*list);
+	*list = NULL;
 }
