@@ -1,10 +1,8 @@
 #ifndef _LAPS_H_
 #define _LAPS_H_
 
-#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 /**
  * struct race_car - node prototype for each car competing in the race
