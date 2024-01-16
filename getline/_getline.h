@@ -2,7 +2,6 @@
 #define _GETLINE_H_
 
 #define READ_SIZE 4096
-#define STOP ('\n' && '\0')
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,6 +32,6 @@ char *_getline(const int fd);
 _file_inv *summon(_file_inv **inv, int id);
 _file_inv *add_file(_file_inv **inv, int fd);
 char *next_line(_file_inv *file);
-void *_realloc(void *mem, ssize_t desired_size);
+char *read_loop(int fd);
 
 #endif

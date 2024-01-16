@@ -57,26 +57,27 @@ _file_inv *summon(_file_inv **inv, int fd)
 _file_inv *add_file(_file_inv **inv, int fd)
 {
 	_file_inv *add = NULL, *file = *inv;
-	char *file_content = NULL;
 
 	add = malloc(sizeof(_file_inv));
 	if (!add)
 		return (NULL);
 	add->fd = fd;
+	add->buffer_size = 0;
 	add->marker = 0;
 	add->next = NULL;
-	file_content = malloc(READ_SIZE);
-	if (!file_content)
-		return (NULL);
-	add->buffer_size = read(fd, file_content, READ_SIZE);
-	if (add->buffer_size == -1)
+	add->buffer = read_loop(fd);
+	if (!(add->buffer))
 	{
-		free(file_content), free(add);
+		free(add);
 		return (NULL);
 	}
-	add->buffer = _realloc(file_content, add->buffer_size);
-	if (!add->buffer)
-		return (NULL);
+	for (
+		;
+		add->buffer[add->buffer_size] != '\0' &&
+		add->buffer[add->buffer_size + 1 != '\0'];
+		add->buffer_size++
+	)
+		;
 	if (!(*inv))
 		*inv = add;
 	else
@@ -84,6 +85,46 @@ _file_inv *add_file(_file_inv **inv, int fd)
 			if (!file->next)
 				file->next = add;
 	return (add);
+}
+
+/**
+ * read_loop - read fd to collect all readable bytes from file into string
+ * @fd: input file descriptor to be read
+ * Return: null-terminated string containing readable bytes from file,
+ *         NULL upon failure (unreadable fd or memory allocation error)
+*/
+
+char *read_loop(int fd)
+{
+	char *buffer = NULL, *out = NULL, *tmp = NULL;
+	ssize_t bytes_read = 0, size = 0;
+
+	buffer = malloc(READ_SIZE);
+	if (!buffer)
+		return (NULL);
+	out = malloc(READ_SIZE);
+	if (!out)
+		return (NULL);
+	while ((bytes_read = read(fd, buffer, READ_SIZE)))
+	{
+		if (bytes_read == -1)
+		{
+			free(out), out = NULL;
+			break;
+		}
+		tmp = realloc(out, size + bytes_read + 1);
+		if (!tmp)
+		{
+			free(out), out = NULL;
+			break;
+		}
+		out = tmp;
+		memcpy(out + size, buffer, bytes_read);
+		size += bytes_read;
+		out[size] = '\0';
+	}
+	free(buffer);
+	return (out);
 }
 
 /**
@@ -122,41 +163,6 @@ char *next_line(_file_inv *file)
 		line[span] = '\0';
 		if (txt[file->marker] == '\0' || txt[file->marker] == '\n')
 			file->marker++;
-/*
-*		if (file->marker == end)
-*			free(txt), txt = NULL;
-*/
 	}
 	return (line);
-}
-
-/**
- * _realloc - reallocate memory segment
- * @input: allocated memory segment to be adjusted
- * @desired_size: size to which input to be reallocated
- * Return: pointer to reallocated memory upon success
-*/
-
-void *_realloc(void *input, ssize_t desired_size)
-{
-	void *update = NULL;
-
-	if (input && !desired_size)
-	{
-		free(input);
-		return (NULL);
-	}
-	else
-	{
-		update = malloc(sizeof(char) * desired_size);
-		if (!update)
-		{
-			if (input)
-				free(input);
-			return (NULL);
-		}
-		memcpy(update, input, desired_size);
-		free(input);
-		return (update);
-	}
 }
