@@ -1,0 +1,16 @@
+CC := gcc
+CFLAGS := -Werror -Wall -Wextra -pedantic
+SRC := 1-main.c _getline.c
+HEAD := _getline.h
+OBJ := $(SRC: %.c = %.o)
+NAME := getline
+
+all: $(OBJ)
+	$(CC) $(CFLAGS) $^ -o $(NAME)
+
+debug: $(OBJ)
+	$(CC) $(CFLAGS) $^ -g -o $(NAME)-debug
+
+.PHONY: debug
+
+$(SRC): $(HEAD)
