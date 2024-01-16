@@ -122,8 +122,10 @@ char *next_line(_file_inv *file)
 		line[span] = '\0';
 		if (txt[file->marker] == '\0' || txt[file->marker] == '\n')
 			file->marker++;
-		// if (file->marker == end)
-		// 	free(txt), txt = NULL;
+/*
+*		if (file->marker == end)
+*			free(txt), txt = NULL;
+*/
 	}
 	return (line);
 }
