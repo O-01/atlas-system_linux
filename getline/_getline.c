@@ -69,6 +69,11 @@ _file_inv *add_file(_file_inv **inv, int fd)
 	if (!file_content)
 		return (NULL);
 	add->buffer_size = read(fd, file_content, READ_SIZE);
+	if (add->buffer_size == -1)
+	{
+		free(file_content), free(add);
+		return (NULL);
+	}
 	add->buffer = _realloc(file_content, add->buffer_size);
 	if (!add->buffer)
 		return (NULL);
@@ -90,10 +95,10 @@ _file_inv *add_file(_file_inv **inv, int fd)
 
 char *next_line(_file_inv *file)
 {
-	size_t mark = file->marker, span = 0, end = file->buffer_size;
+	size_t mark = file->marker, span = 0, end = file->buffer_size - 1;
 	char *txt = file->buffer, *line = NULL;
 
-	if (mark < end)
+	if (mark < end && txt[mark] != '\0')
 	{
 		for (
 			;
@@ -109,9 +114,10 @@ char *next_line(_file_inv *file)
 		for (span = 0; file->marker != mark; file->marker++, span++)
 			line[span] = txt[file->marker];
 		line[span] = '\0';
-		if (txt[mark] == '\0')
+		if (txt[file->marker] == '\0')
 			free(txt), txt = NULL;
-		file->marker++;
+		else if (txt[file->marker] == '\n')
+			file->marker++;
 	}
 	return (line);
 }
@@ -134,7 +140,7 @@ void *_realloc(void *input, ssize_t desired_size)
 	}
 	else
 	{
-		update = malloc(desired_size);
+		update = malloc(sizeof(char) * desired_size);
 		if (!update)
 		{
 			if (input)

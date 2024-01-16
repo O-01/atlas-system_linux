@@ -10,18 +10,17 @@
  *
  * Return: always 0.
  */
-
 int main(void)
 {
-	int fd;
-	char *line;
+    int fd;
+    char *line;
 
-	fd = open("1-main.c", 0);
-	while ((line = _getline(fd)))
-	{
-		printf("%s\n", line);
-		free(line);
-	}
-	close(fd);
-	return (0);
+    fd = open("1-main.c", 0);
+    while ((line = _getline(fd)))
+    {
+        printf("%s\n", line);
+        free(line);
+    }
+    close(fd);
+    return (0);
 }
