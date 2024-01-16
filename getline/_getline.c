@@ -95,29 +95,35 @@ _file_inv *add_file(_file_inv **inv, int fd)
 
 char *next_line(_file_inv *file)
 {
-	size_t mark = file->marker, span = 0, end = file->buffer_size - 1;
+	size_t mark = file->marker, span = 0, end = file->buffer_size;
 	char *txt = file->buffer, *line = NULL;
 
-	if (mark < end && txt[mark] != '\0')
+	if (mark < end)
 	{
 		for (
 			;
+			mark != end &&
 			txt[mark] != '\n' &&
-			txt[mark] != '\0' &&
-			mark != end;
+			txt[mark] != '\0';
 			mark++, span++
 		)
 			;
 		line = malloc(sizeof(char) * span + 1);
 		if (!line)
 			return (NULL);
-		for (span = 0; file->marker != mark; file->marker++, span++)
+		for (
+			span = 0;
+			file->marker < mark &&
+			txt[file->marker] != '\n' &&
+			txt[file->marker] != '\0';
+			++file->marker, ++span
+		)
 			line[span] = txt[file->marker];
 		line[span] = '\0';
-		if (txt[file->marker] == '\0')
-			free(txt), txt = NULL;
-		else if (txt[file->marker] == '\n')
+		if (txt[file->marker] == '\0' || txt[file->marker] == '\n')
 			file->marker++;
+		// if (file->marker == end)
+		// 	free(txt), txt = NULL;
 	}
 	return (line);
 }

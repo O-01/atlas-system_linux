@@ -1,7 +1,7 @@
 #ifndef _GETLINE_H_
 #define _GETLINE_H_
 
-#define READ_SIZE (1024 * 1024 * 4)
+#define READ_SIZE 4096
 #define STOP ('\n' && '\0')
 
 #include <stdio.h>
