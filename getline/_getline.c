@@ -139,7 +139,7 @@ char *next_line(_file_inv *file)
 	size_t mark = file->marker, span = 0, end = file->buffer_size;
 	char *txt = file->buffer, *line = NULL;
 
-	if (mark < end)
+	if (mark <= end)
 	{
 		for (
 			;
