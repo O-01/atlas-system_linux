@@ -18,9 +18,9 @@ int main(void)
     char *line3;
     int i;
 
-    fd1 = open("the_swing", O_RDONLY);
-    fd2 = open("man_gcc", O_RDONLY);
-    fd3 = open("man_cat", O_RDONLY);
+    fd1 = open("test/the_swing", O_RDONLY);
+    fd2 = open("test/man_gcc", O_RDONLY);
+    fd3 = open("test/man_cat", O_RDONLY);
     printf("---------THE SWING (first 5 lines)-----------\n");
     i = 0;
     while ((line1 = _getline(fd1)))
@@ -68,7 +68,7 @@ int main(void)
     close(fd3);
     _getline(-1);
     printf("---------THE SWING (FULL-TEXT)-----------\n");
-    fd1 = open("the_swing", O_RDONLY);
+    fd1 = open("test/the_swing", O_RDONLY);
     while ((line1 = _getline(fd1)))
     {
         printf("%s\n", line1);      
