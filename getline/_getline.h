@@ -16,6 +16,7 @@
  * @buffer: buffer to contain applicable text content from file stream
  * @buffer_size: bytes read from file stream
  * @marker: keeps track of cursor position within buffer
+ * @solo: flag used when file contains only new line character
  * @next: pointer to next node if present, else NULL
  */
 
@@ -25,6 +26,7 @@ typedef struct _file_inventory
 	char *buffer;
 	ssize_t buffer_size;
 	size_t marker;
+	size_t solo;
 	struct _file_inventory *next;
 } _file_inv;
 

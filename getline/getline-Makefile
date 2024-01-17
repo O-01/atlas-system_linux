@@ -1,6 +1,6 @@
 CC := gcc
 CFLAGS := -Werror -Wall -Wextra -pedantic
-SRC := 1-main.c _getline.c
+SRC := 2-main.c _getline.c
 HEAD := _getline.h
 OBJ := $(SRC: %.c = %.o)
 NAME := getline

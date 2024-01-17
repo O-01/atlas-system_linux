@@ -14,13 +14,26 @@ char *_getline(const int fd)
 	char *line = NULL;
 
 	if (fd == -1)
-		return (NULL); /* for now, part of task 2 */
+	{
+		if (!inventory)
+			return (NULL);
+		else if (inventory->next)
+			for (; inventory; inventory = file)
+			{
+				file = inventory->next;
+				if (inventory->buffer)
+					free(inventory->buffer), inventory->buffer = NULL;
+				free(inventory);
+			}
+		free(inventory), inventory = NULL;
+		return (NULL);
+	}
 	file = summon(&inventory, fd);
 	if (!file)
 		return (NULL);
 	line = next_line(file);
 	if (!line)
-		free(file->buffer), file->buffer = NULL, free(file);
+		free(file->buffer), file->buffer = NULL;
 	return (line);
 }
 
@@ -64,6 +77,16 @@ _file_inv *add_file(_file_inv **inv, int fd)
 	add->fd = fd;
 	add->buffer_size = 0;
 	add->marker = 0;
+	add->solo = 0;
+	if (!(*inv))
+		*inv = add;
+	else
+		for (; file; file = file->next)
+			if (!file->next)
+			{
+				file->next = add;
+				break;
+			}
 	add->next = NULL;
 	add->buffer = read_loop(fd);
 	if (!(add->buffer))
@@ -78,12 +101,6 @@ _file_inv *add_file(_file_inv **inv, int fd)
 		add->buffer_size++
 	)
 		;
-	if (!(*inv))
-		*inv = add;
-	else
-		for (; file; file = file->next)
-			if (!file->next)
-				file->next = add;
 	return (add);
 }
 
@@ -138,9 +155,8 @@ char *next_line(_file_inv *file)
 {
 	size_t mark = file->marker, span = 0, end = file->buffer_size;
 	char *txt = file->buffer, *line = NULL;
-	static int solo;
 
-	if ((mark < end || (end == 0 && txt[mark] == '\n')) && !solo)
+	if ((mark < end || (end == 0 && txt[mark] == '\n')) && !file->solo)
 	{
 		for (
 			;
@@ -164,8 +180,8 @@ char *next_line(_file_inv *file)
 		if (txt[file->marker] == '\0' || txt[file->marker] == '\n')
 			file->marker++;
 		line[span] = '\0';
-		if (!end && !solo)
-			solo = 1;
+		if (!end && !file->solo)
+			file->solo = 1;
 	}
 	else
 		return (NULL);
