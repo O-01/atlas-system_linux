@@ -138,9 +138,9 @@ char *next_line(_file_inv *file)
 {
 	size_t mark = file->marker, span = 0, end = file->buffer_size;
 	char *txt = file->buffer, *line = NULL;
-	static int solo = 0;
+	static int solo;
 
-	if ((mark < end || end == 0) && !solo)
+	if ((mark < end || (end == 0 && txt[mark] == '\n')) && !solo)
 	{
 		for (
 			;
@@ -148,19 +148,19 @@ char *next_line(_file_inv *file)
 			txt[mark] != '\n' &&
 			txt[mark] != '\0';
 			mark++, span++
-			)
-				;
+		)
+			;
 		line = malloc(sizeof(char) * span + 1);
 		if (!line)
 			return (NULL);
 		for (
-				span = 0;
-				file->marker < mark &&
-				txt[file->marker] != '\n' &&
-				txt[file->marker] != '\0';
-				file->marker++, span++
-			)
-				line[span] = txt[file->marker];
+			span = 0;
+			file->marker < mark &&
+			txt[file->marker] != '\n' &&
+			txt[file->marker] != '\0';
+			file->marker++, span++
+		)
+			line[span] = txt[file->marker];
 		if (txt[file->marker] == '\0' || txt[file->marker] == '\n')
 			file->marker++;
 		line[span] = '\0';
