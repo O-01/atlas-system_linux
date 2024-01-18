@@ -88,30 +88,24 @@ _file_inv *add_file(_file_inv **inv, int fd)
 				break;
 			}
 	add->next = NULL;
-	add->buffer = read_loop(fd);
+	add->buffer = read_loop(fd, &(add->buffer_size));
 	if (!(add->buffer))
 	{
 		free(add);
 		return (NULL);
 	}
-	for (
-		;
-		add->buffer[add->buffer_size] != '\0' &&
-		add->buffer[add->buffer_size + 1 != '\0'];
-		add->buffer_size++
-	)
-		;
 	return (add);
 }
 
 /**
  * read_loop - read fd to collect all readable bytes from file into string
  * @fd: input file descriptor to be read
+ * @buffer_size: retrieve size into file struct attribute file->buffer_size
  * Return: null-terminated string containing readable bytes from file,
  *         NULL upon failure (unreadable fd or memory allocation error)
 */
 
-char *read_loop(int fd)
+char *read_loop(int fd, ssize_t *buffer_size)
 {
 	char *buffer = NULL, *out = NULL, *tmp = NULL;
 	ssize_t bytes_read = 0, size = 0;
@@ -139,6 +133,7 @@ char *read_loop(int fd)
 		memcpy(out + size, buffer, bytes_read);
 		size += bytes_read;
 		out[size] = '\0';
+		*buffer_size = size;
 	}
 	free(buffer);
 	return (out);
@@ -161,8 +156,7 @@ char *next_line(_file_inv *file)
 		for (
 			;
 			mark != end &&
-			txt[mark] != '\n' &&
-			txt[mark] != '\0';
+			txt[mark] != '\n';
 			mark++, span++
 		)
 			;
@@ -172,8 +166,7 @@ char *next_line(_file_inv *file)
 		for (
 			span = 0;
 			file->marker < mark &&
-			txt[file->marker] != '\n' &&
-			txt[file->marker] != '\0';
+			txt[file->marker] != '\n';
 			file->marker++, span++
 		)
 			line[span] = txt[file->marker];

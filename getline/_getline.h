@@ -34,6 +34,6 @@ char *_getline(const int fd);
 _file_inv *summon(_file_inv **inv, int id);
 _file_inv *add_file(_file_inv **inv, int fd);
 char *next_line(_file_inv *file);
-char *read_loop(int fd);
+char *read_loop(int fd, ssize_t *buffer_size);
 
 #endif
