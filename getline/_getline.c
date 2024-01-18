@@ -100,6 +100,7 @@ _file_inv *add_file(_file_inv **inv, int fd)
 /**
  * read_loop - read fd to collect all readable bytes from file into string
  * @fd: input file descriptor to be read
+ * @buffer_size: retrieve size into file struct attribute file->buffer_size
  * Return: null-terminated string containing readable bytes from file,
  *         NULL upon failure (unreadable fd or memory allocation error)
 */
