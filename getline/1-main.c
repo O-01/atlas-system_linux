@@ -14,7 +14,7 @@
  */
 int main(int ac, char *av[])
 {
-	char *file = "test/no_new_line";
+	char *file = "test/normal_0";
 	int fd;
 	char *line;
 	int i;
@@ -37,5 +37,6 @@ int main(int ac, char *av[])
 	}
 	printf("Total: %d lines\n", i);
 	close(fd);
+	_getline(-1);
 	return (EXIT_SUCCESS);
 }
