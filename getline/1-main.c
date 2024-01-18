@@ -14,7 +14,7 @@
  */
 int main(int ac, char *av[])
 {
-	char *file = "1-main.c";
+	char *file = "test/no_new_line";
 	int fd;
 	char *line;
 	int i;
