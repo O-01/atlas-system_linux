@@ -253,6 +253,7 @@ static void free_cdt(file_l **list)
  * error_dump - handles errors
  * @exec: name of program executable
  * @filename: name of file that caused error
+ * @code: represents error code
 */
 
 static void error_dump(char *exec, char *filename, int code)
