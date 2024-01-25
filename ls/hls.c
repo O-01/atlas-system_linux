@@ -41,7 +41,8 @@ int main(const int argc, char **argv)
 			p_ = printer(tmp->name, delim, cmd.flags, printed, o_);
 			if (p_ == 2)
 				error_dump(argv[0], tmp->name);
-			printed = 1;
+			if (!p_)
+				printed = 1;
 		}
 	else
 		printer(".", delim, cmd.flags, printed, o_);
