@@ -47,5 +47,7 @@ typedef struct command_data
 } c_dt;
 
 char *_strcpy(char *dest, char *src);
+int _strcmp(char *str1, char *str2);
+int _strlen(char *str);
 
 #endif

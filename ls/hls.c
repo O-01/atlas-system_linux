@@ -4,6 +4,7 @@ static void arg_munch(char **argv, c_dt *cmd);
 static void flag_setter(char *flag_string, int *flags);
 static int list_packer(char *dir_name, dir_l **list);
 static void print_content(char *filename, char *delim, int flags);
+static void free_cdt(dir_l **list);
 
 /**
  * main - program entry
@@ -15,7 +16,7 @@ static void print_content(char *filename, char *delim, int flags);
 int main(const int argc, char **argv)
 {
 	c_dt cmd;
-	dir_l *tmp, *current;
+	dir_l *tmp;
 	char *delim = "  ";
 	int printed = 0;
 
@@ -36,20 +37,13 @@ int main(const int argc, char **argv)
 		{
 			if (printed)
 				printf("\n\n");
+			printf("%s:\n", tmp->name);
 			print_content(tmp->name, delim, cmd.flags);
 			printed = 1;
 		}
 	else
 		print_content(".", delim, cmd.flags);
-	/* temporary */
-	for (tmp = cmd.dir_list; tmp;)
-	{
-		current = tmp;
-		tmp = tmp->next;
-		free(current->name), current->name = NULL;
-		free(current), current = NULL;
-	}
-	/* temporary */
+	free_cdt(&cmd.dir_list);
 	printf("\n");
 	return (0);
 }
@@ -137,20 +131,41 @@ static void flag_setter(char *flag_string, int *flags)
 
 static int list_packer(char *dir_name, dir_l **list)
 {
-	dir_l *tmp = NULL;
+	dir_l *add = NULL, *tmp = NULL;
 
+	add = malloc(sizeof(dir_l));
+	if (!add)
+		return (-1);
+	add->name = malloc(sizeof(char) * _strlen(dir_name) + 1);
+	if (!add->name)
+		return (-1);
+	_strcpy(add->name, dir_name);
 	if (!*list)
 	{
-		tmp = malloc(sizeof(dir_l));
-		if (!tmp)
-			return (-1);
-		tmp->name = malloc(sizeof(char *) + 1);
-		if (!tmp->name)
-			return (-1);
-		_strcpy(tmp->name, dir_name);
-		tmp->next = NULL;
-		tmp->prev = NULL;
-		*list = tmp;
+		add->next = NULL;
+		add->prev = NULL;
+		*list = add;
+	}
+	else
+	{
+		if (_strcmp(dir_name, (*list)->name) < 0)
+		{
+			add->prev = NULL;
+			(*list)->prev = add;
+			add->next = *list;
+			*list = add;
+		}
+		else
+		{
+			for (tmp = *list; tmp; tmp = tmp->next)
+				if (_strcmp(dir_name, tmp->name) > 0)
+				{
+					add->next = tmp->next;
+					add->prev = tmp;
+					tmp->next = add;
+					break;
+				}
+		}
 	}
 	return (0);
 }
@@ -201,4 +216,22 @@ static void print_content(char *filename, char *delim, int flags)
 		printed = 1;
 	}
 	closedir(open_up);
+}
+
+/**
+ * free_cdt - free all memory related to command data
+ * @list: pointer to beginning of allocated memory
+*/
+
+static void free_cdt(dir_l **list)
+{
+	dir_l *tmp = NULL, *current = NULL;
+
+	for (tmp = *list; tmp;)
+	{
+		current = tmp;
+		tmp = tmp->next;
+		free(current->name), current->name = NULL;
+		free(current), current = NULL;
+	}
 }
