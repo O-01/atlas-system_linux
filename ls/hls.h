@@ -8,24 +8,26 @@
 #include <sys/types.h>
 
 /**
- * struct dir_list - list of directories related to command data
+ * struct file_list - list of directories related to command data
  * @name: name of directory
+ * @is_dir: flag that indicates whether entry is directory
  * @next: next directory entry in list
  * @prev: previous directory entry in list
 */
 
-typedef struct dir_list
+typedef struct file_list
 {
 	char *name;
-	struct dir_list *next;
-	struct dir_list *prev;
-} dir_l;
+	int is_dir;
+	struct file_list *next;
+	struct file_list *prev;
+} file_l;
 
 /**
  * struct command_data - structure to retain data from command input
  * @arg_c: count of arguments minus the first argument (executable name)
- * @dir_count: count of directories of which to find contents
- * @dir_list: list of directories of which to find contents
+ * @file_count: count of directories of which to find contents
+ * @file_list: list of directories of which to find contents
  * @flags: hex value corresponding to bits set based on flags requested
  *         0x01 = 00000001 : -1
  *         0x02 = 00000010 : -l
@@ -41,8 +43,8 @@ typedef struct dir_list
 typedef struct command_data
 {
 	int arg_c;
-	int dir_count;
-	dir_l *dir_list;
+	int file_count;
+	file_l *file_list;
 	int flags;
 } c_dt;
 

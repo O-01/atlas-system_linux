@@ -2,9 +2,10 @@
 
 static void arg_munch(char **argv, c_dt *cmd);
 static void flag_setter(char *flag_string, int *flags);
-static int list_packer(char *dir_name, dir_l **list);
-static void print_content(char *filename, char *delim, int flags);
-static void free_cdt(dir_l **list);
+static int list_packer(char *filename, file_l **list);
+static int printer(char *file_, char *delim, int flags, int o_p, int o_);
+static void free_cdt(file_l **list);
+static void error_dump(char *exec, char *filename);
 
 /**
  * main - program entry
@@ -16,13 +17,11 @@ static void free_cdt(dir_l **list);
 int main(const int argc, char **argv)
 {
 	c_dt cmd;
-	dir_l *tmp;
+	file_l *tmp;
 	char *delim = "  ";
-	int printed = 0;
+	int printed = 0, o_ = 0, p_ = 0;
 
-	cmd.arg_c = argc;
-	cmd.dir_count = 0;
-	cmd.dir_list = NULL;
+	cmd.arg_c = argc, cmd.file_count = 0, cmd.file_list = NULL;
 	cmd.flags = 0x00;
 	if (argc > 1)
 	{
@@ -30,21 +29,25 @@ int main(const int argc, char **argv)
 		if (cmd.flags & (1 << 0) || cmd.flags & (1 << 1))
 			delim = "\n";
 	}
-	if (cmd.dir_count == 1)
-		print_content(cmd.dir_list->name, delim, cmd.flags);
-	else if (cmd.dir_count > 1 || cmd.flags & (1 << 7))
-		for (tmp = cmd.dir_list; tmp; tmp = tmp->next)
+	if (cmd.file_count == 1)
+	{
+		p_ = printer(cmd.file_list->name, delim, cmd.flags, printed, o_);
+		if (p_ == 2)
+			error_dump(argv[0], cmd.file_list->name);
+	}
+	else if (cmd.file_count > 1 || cmd.flags & (1 << 7))
+		for (tmp = cmd.file_list, o_ = 1; tmp; tmp = tmp->next)
 		{
-			if (printed)
-				printf("\n\n");
-			printf("%s:\n", tmp->name);
-			print_content(tmp->name, delim, cmd.flags);
+			p_ = printer(tmp->name, delim, cmd.flags, printed, o_);
+			if (p_ == 2)
+				error_dump(argv[0], tmp->name);
 			printed = 1;
 		}
 	else
-		print_content(".", delim, cmd.flags);
-	free_cdt(&cmd.dir_list);
-	printf("\n");
+		printer(".", delim, cmd.flags, printed, o_);
+	free_cdt(&cmd.file_list);
+	if (p_ == 0)
+		printf("\n");
 	return (0);
 }
 
@@ -74,7 +77,7 @@ static void arg_munch(char **argv, c_dt *cmd)
 			}
 		}
 		else
-			list_packer(argv[iter], &cmd->dir_list), cmd->dir_count++;
+			list_packer(argv[iter], &cmd->file_list), cmd->file_count++;
 	}
 }
 
@@ -124,23 +127,23 @@ static void flag_setter(char *flag_string, int *flags)
 /**
  * list_packer - populate command data dir list
  *               (for use with -R or multiple directory input)
- * @dir_name: name of directory to be added to list
+ * @filename: name of directory to be added to list
  * @list: command data dir list to which directory to be added
  * Return: -1 upon memory allocation failure, 0 otherwise
 */
 
-static int list_packer(char *dir_name, dir_l **list)
+static int list_packer(char *filename, file_l **list)
 {
-	dir_l *add = NULL, *tmp = NULL;
+	file_l *add = NULL, *tmp = NULL;
 	int diff = 0;
 
-	add = malloc(sizeof(dir_l));
+	add = malloc(sizeof(file_l));
 	if (!add)
 		return (-1);
-	add->name = malloc(sizeof(char) * _strlen(dir_name) + 1);
+	add->name = malloc(sizeof(char) * _strlen(filename) + 1);
 	if (!add->name)
 		return (-1);
-	_strcpy(add->name, dir_name);
+	_strcpy(add->name, filename);
 	if (!*list)
 	{
 		add->next = NULL;
@@ -177,24 +180,30 @@ static int list_packer(char *dir_name, dir_l **list)
 }
 
 /**
- * print_content - print directory contents
- * @filename: name of directory whose contents are to be printed
+ * printer - print directory contents
+ * @file_: name of directory whose contents are to be printed
  * @delim: delimiter to be placed between content entries
  * @flags: flags that determine what should be printed
+ * @o_p: flag indicates loop has already printed, if applicable
+ * @o_: flag indicates loop usage
+ * Return: 2 upon file/directory not found, 0 otherwise
 */
 
-static void print_content(char *filename, char *delim, int flags)
+static int printer(char *file_, char *delim, int flags, int o_p, int o_)
 {
 	DIR *open_up = NULL;
 	struct dirent *read_d = NULL;
 	char *name = NULL;
 	int printed = 0;
 
-	open_up = opendir(filename);
+	open_up = opendir(file_);
 	if (!open_up)
+		return (2);
+	if (o_)
 	{
-		perror("WIP");
-		return;
+		if (o_p)
+			printf("\n\n");
+		printf("%s:\n", file_);
 	}
 	for (printed = 0; (read_d = readdir(open_up));)
 	{
@@ -222,6 +231,7 @@ static void print_content(char *filename, char *delim, int flags)
 		printed = 1;
 	}
 	closedir(open_up);
+	return (0);
 }
 
 /**
@@ -229,9 +239,9 @@ static void print_content(char *filename, char *delim, int flags)
  * @list: pointer to beginning of allocated memory
 */
 
-static void free_cdt(dir_l **list)
+static void free_cdt(file_l **list)
 {
-	dir_l *tmp = NULL, *current = NULL;
+	file_l *tmp = NULL, *current = NULL;
 
 	for (tmp = *list; tmp;)
 	{
@@ -240,4 +250,19 @@ static void free_cdt(dir_l **list)
 		free(current->name), current->name = NULL;
 		free(current), current = NULL;
 	}
+}
+
+/**
+ * error_dump - handles errors
+ * @exec: name of program executable
+ * @filename: name of file that caused error
+*/
+
+static void error_dump(char *exec, char *filename)
+{
+	fprintf(
+		stderr,
+		"%s: cannot access %s: No such file or directory\n",
+		exec, filename
+	);
 }
