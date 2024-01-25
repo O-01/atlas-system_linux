@@ -1,5 +1,10 @@
 #include "hls.h"
 
+static void arg_munch(char **argv, c_dt *cmd);
+static void flag_setter(char *flag_string, int *flags);
+static int list_packer(char *dir_name, dir_l **list);
+static void print_content(char *filename, char *delim, int flags);
+
 /**
  * main - program entry
  * @argc: argument count to program
@@ -14,28 +19,28 @@ int main(const int argc, char **argv)
 	char *delim = "  ";
 	int printed = 0;
 
+	cmd.arg_c = argc;
+	cmd.dir_count = 0;
+	cmd.dir_list = NULL;
+	cmd.flags = 0x00;
 	if (argc > 1)
 	{
-		cmd.arg_c = argc;
-		cmd.dir_count = 0;
-		cmd.dir_list = NULL;
-		cmd.flags = 0x00;
 		arg_munch(argv, &cmd);
 		if (cmd.flags & (1 << 0) || cmd.flags & (1 << 1))
 			delim = "\n";
 	}
-	if (cmd.dir_count == 1 && !(cmd.flags))
-		print_content(cmd.dir_list->name, delim);
+	if (cmd.dir_count == 1)
+		print_content(cmd.dir_list->name, delim, cmd.flags);
 	else if (cmd.dir_count > 1 || cmd.flags & (1 << 7))
 		for (tmp = cmd.dir_list; tmp; tmp = tmp->next)
 		{
 			if (printed)
 				printf("\n\n");
-			print_content(tmp->name, delim);
+			print_content(tmp->name, delim, cmd.flags);
 			printed = 1;
 		}
 	else
-		print_content(".", delim);
+		print_content(".", delim, cmd.flags);
 	/* temporary */
 	for (tmp = cmd.dir_list; tmp;)
 	{
@@ -89,7 +94,7 @@ static void flag_setter(char *flag_string, int *flags)
 {
 	unsigned int iter = 1;
 
-	for (; flag_string[iter]; flags++)
+	for (; flag_string[iter]; iter++)
 		switch (flag_string[iter])
 		{
 			case '1':
@@ -142,7 +147,7 @@ static int list_packer(char *dir_name, dir_l **list)
 		tmp->name = malloc(sizeof(char *) + 1);
 		if (!tmp->name)
 			return (-1);
-		strcpy(tmp->name, dir_name);
+		_strcpy(tmp->name, dir_name);
 		tmp->next = NULL;
 		tmp->prev = NULL;
 		*list = tmp;
@@ -154,15 +159,16 @@ static int list_packer(char *dir_name, dir_l **list)
  * print_content - print directory contents
  * @filename: name of directory whose contents are to be printed
  * @delim: delimiter to be placed between content entries
+ * @flags: flags that determine what should be printed
 */
 
-static void print_content(char *filename, char *delim)
+static void print_content(char *filename, char *delim, int flags)
 {
 	DIR *open_up = NULL;
 	struct dirent *read_d = NULL;
+	char *name = NULL;
 	int printed = 0;
 
-	printf("%s\n", filename);
 	open_up = opendir(filename);
 	if (!open_up)
 	{
@@ -171,13 +177,27 @@ static void print_content(char *filename, char *delim)
 	}
 	for (printed = 0; (read_d = readdir(open_up));)
 	{
+		name = read_d->d_name;
+		if (name[0] == '.')
+		{
+			if (
+				(!name[1] || (name[1] == '.' && !name[2])) &&
+				!(flags & (1 << 2))
+			)
+				continue;
+			else if (
+				(name[1] == '.' && name[2]) &&
+				!((flags & (1 << 2)) | (flags & (1 << 3)))
+			)
+				continue;
+		}
 		if (printed)
 			printf("%s", delim);
 		/* printf("inode no. - %ld\n", read_d->d_ino);*/
 		/* printf("offset to next dirent - %ld\n", read_d->d_off);*/
 		/* printf("length of this record - %d\n", read_d->d_reclen);*/
 		/* printf("file type - %c|\n", read_d->d_type);*/
-		printf("%s", read_d->d_name);
+		printf("%s", name);
 		printed = 1;
 	}
 	closedir(open_up);

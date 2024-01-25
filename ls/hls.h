@@ -4,7 +4,6 @@
 #include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 
@@ -47,9 +46,6 @@ typedef struct command_data
 	int flags;
 } c_dt;
 
-static void arg_munch(char **argv, c_dt *cmd);
-static void flag_setter(char *flag_string, int *flags);
-static int list_packer(char *dir_name, dir_l **list);
-static void print_content(char *filename, char *delim);
+char *_strcpy(char *dest, char *src);
 
 #endif
