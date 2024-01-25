@@ -132,7 +132,9 @@ static void flag_setter(char *flag_string, int *flags)
 static int list_packer(char *dir_name, dir_l **list)
 {
 	dir_l *add = NULL, *tmp = NULL;
+	int diff = 0;
 
+	printf("%s\n", dir_name);
 	add = malloc(sizeof(dir_l));
 	if (!add)
 		return (-1);
@@ -142,29 +144,35 @@ static int list_packer(char *dir_name, dir_l **list)
 	_strcpy(add->name, dir_name);
 	if (!*list)
 	{
+		printf("new\n");
 		add->next = NULL;
 		add->prev = NULL;
 		*list = add;
 	}
 	else
 	{
-		if (_strcmp(dir_name, (*list)->name) < 0)
+		diff = _strcmp(add->name, (*list)->name);
+		if (diff < 0 && diff != -32)
 		{
 			add->prev = NULL;
-			(*list)->prev = add;
 			add->next = *list;
+			(*list)->prev = add;
 			*list = add;
 		}
 		else
 		{
 			for (tmp = *list; tmp; tmp = tmp->next)
-				if (_strcmp(dir_name, tmp->name) > 0)
-				{
-					add->next = tmp->next;
-					add->prev = tmp;
-					tmp->next = add;
-					break;
-				}
+			{
+				diff = _strcmp(add->name, tmp->name);
+				if (tmp->next && _strcmp(add->name, tmp->next->name) < 0)
+					continue;
+				add->next = tmp->next;
+				add->prev = tmp;
+				if (tmp->next)
+					tmp->next->prev = add;
+				tmp->next = add;
+				break;
+			}
 		}
 	}
 	return (0);
