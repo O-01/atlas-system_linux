@@ -134,7 +134,6 @@ static int list_packer(char *dir_name, dir_l **list)
 	dir_l *add = NULL, *tmp = NULL;
 	int diff = 0;
 
-	printf("%s\n", dir_name);
 	add = malloc(sizeof(dir_l));
 	if (!add)
 		return (-1);
@@ -144,7 +143,6 @@ static int list_packer(char *dir_name, dir_l **list)
 	_strcpy(add->name, dir_name);
 	if (!*list)
 	{
-		printf("new\n");
 		add->next = NULL;
 		add->prev = NULL;
 		*list = add;
