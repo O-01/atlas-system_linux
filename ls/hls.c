@@ -5,7 +5,7 @@ static void flag_setter(char *flag_string, int *flags);
 static int list_packer(char *filename, file_l **list);
 static int printer(char *file_, char *delim, int flags, int o_p, int o_);
 static void free_cdt(file_l **list);
-static void error_dump(char *exec, char *filename);
+static void error_dump(char *exec, char *filename, int code);
 
 /**
  * main - program entry
@@ -32,15 +32,15 @@ int main(const int argc, char **argv)
 	if (cmd.file_count == 1)
 	{
 		p_ = printer(cmd.file_list->name, delim, cmd.flags, printed, o_);
-		if (p_ == 2)
-			error_dump(argv[0], cmd.file_list->name);
+		if (p_)
+			error_dump(argv[0], cmd.file_list->name, p_);
 	}
 	else if (cmd.file_count > 1 || cmd.flags & (1 << 7))
 		for (tmp = cmd.file_list, o_ = 1; tmp; tmp = tmp->next)
 		{
 			p_ = printer(tmp->name, delim, cmd.flags, printed, o_);
-			if (p_ == 2)
-				error_dump(argv[0], tmp->name);
+			if (p_)
+				error_dump(argv[0], tmp->name, p_);
 			if (!p_)
 				printed = 1;
 		}
@@ -199,7 +199,7 @@ static int printer(char *file_, char *delim, int flags, int o_p, int o_)
 
 	open_up = opendir(file_);
 	if (!open_up)
-		return (2);
+		return (errno);
 	if (o_)
 	{
 		if (o_p)
@@ -224,10 +224,6 @@ static int printer(char *file_, char *delim, int flags, int o_p, int o_)
 		}
 		if (printed)
 			printf("%s", delim);
-		/* printf("inode no. - %ld\n", read_d->d_ino);*/
-		/* printf("offset to next dirent - %ld\n", read_d->d_off);*/
-		/* printf("length of this record - %d\n", read_d->d_reclen);*/
-		/* printf("file type - %c|\n", read_d->d_type);*/
 		printf("%s", name);
 		printed = 1;
 	}
@@ -259,11 +255,18 @@ static void free_cdt(file_l **list)
  * @filename: name of file that caused error
 */
 
-static void error_dump(char *exec, char *filename)
+static void error_dump(char *exec, char *filename, int code)
 {
-	fprintf(
-		stderr,
-		"%s: cannot access %s: No such file or directory\n",
-		exec, filename
-	);
+	if (code == 2)
+		fprintf(
+			stderr,
+			"%s: cannot access %s: No such file or directory\n",
+			exec, filename
+		);
+	else if (code == 13)
+		fprintf(
+			stderr,
+			"%s: cannot open directory %s: Permission denied\n",
+			exec, filename
+		);
 }

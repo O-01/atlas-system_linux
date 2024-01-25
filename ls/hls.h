@@ -2,6 +2,7 @@
 #define _HLS_H_
 
 #include <dirent.h>
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
