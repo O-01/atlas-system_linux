@@ -186,7 +186,7 @@ static void print_content(char *filename, char *delim, int flags)
 			)
 				continue;
 			else if (
-				(name[1] == '.' && name[2]) &&
+				(name[1] || (name[1] == '.' && name[2])) &&
 				!((flags & (1 << 2)) | (flags & (1 << 3)))
 			)
 				continue;
