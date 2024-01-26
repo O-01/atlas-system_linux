@@ -7,11 +7,11 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <time.h>
 
 /**
  * struct file_list - list of directories related to command data
  * @name: name of directory
- * @is_dir: flag that indicates whether entry is directory
  * @next: next directory entry in list
  * @prev: previous directory entry in list
 */
@@ -19,7 +19,14 @@
 typedef struct file_list
 {
 	char *name;
-	int is_dir;
+	/* int is_dir; */
+	/* mode_t mode; */
+	/* char *mode_decode; */
+	/* nlink_t links; */
+	/* uid_t owner_id; */
+	/* gid_t owner_gp; */
+	/* off_t size; */
+	/* time_t mtime; */
 	struct file_list *next;
 	struct file_list *prev;
 } file_l;
@@ -52,5 +59,6 @@ typedef struct command_data
 char *_strcpy(char *dest, char *src);
 int _strcmp(char *str1, char *str2);
 int _strlen(char *str);
+char *_strdup(char *str);
 
 #endif

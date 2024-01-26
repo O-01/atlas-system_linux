@@ -48,3 +48,25 @@ int _strlen(char *str)
 		;
 	return (iter);
 }
+
+/**
+ * _strdup - duplicates string str & returns pointer to the duplicate
+ * @str: object string
+ * Return: pointer to duplicate of str
+ */
+
+char *_strdup(char *str)
+{
+	char *copy = 0;
+	int iter_1 = 0, iter_2 = 0;
+
+	if (!str)
+		return (NULL);
+	iter_2 = _strlen(str) + 1;
+	copy = malloc(sizeof(char) * iter_2);
+	if (!copy)
+		return (NULL);
+	for (; iter_1 < iter_2; iter_1++)
+		copy[iter_1] = str[iter_1];
+	return (copy);
+}
