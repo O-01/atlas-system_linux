@@ -114,7 +114,7 @@ static void l_print(char *file)
 		printf("%ld ", extract.st_size);
 		/* printf("%*ld ", 5, extract.st_size); */
 		/* printf("%.24s ", ctime(&extract.st_mtime)); */
-		printf("%.16s ", ctime(&extract.st_mtime));
+		printf("%.12s ", &ctime(&extract.st_mtime)[4]);
 	}
 }
 
