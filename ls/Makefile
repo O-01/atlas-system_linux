@@ -11,6 +11,8 @@ all: $(OBJ)
 debug: $(OBJ)
 	$(CC) $(CFLAGS) $^ -g -o $(NAME)-debug
 
-.PHONY: debug
+release: all debug
+
+.PHONY: debug release
 
 $(SRC): $(HEAD)

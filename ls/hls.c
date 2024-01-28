@@ -29,6 +29,7 @@ int main(const int argc, char **argv)
 	if (cmd.arg_c > 1)
 		if (arg_munch(argv, &cmd) == -1)
 			error_flag = 1;
+	printf("dir count %d, file count %d\n", cmd.dir_count, cmd.file_count);
 	manager(argv, cmd, error_flag);
 	free_cdt(&cmd.dir_list, &cmd.file_list);
 	return (0);
@@ -38,7 +39,7 @@ int main(const int argc, char **argv)
  * manager - tells things what they need to do
  * @argv: argument vector passed to program upon launch
  * @cmd: command data struct
- * @error_flag: flag indicating one or more arguments raised error
+ * @error_flag: flag indicating one or more arguments has raised error
 */
 
 static void manager(char **argv, c_dt cmd, int error_flag)
@@ -73,7 +74,7 @@ static void manager(char **argv, c_dt cmd, int error_flag)
 				printed = 1;
 		}
 	}
-	else if (!cmd.dir_count && !cmd.file_count)
+	else if (!cmd.dir_count && !cmd.file_count && !error_flag)
 		printer_d(NULL, cmd.flags, printed, loop_flag);
 	if (print_error == 0)
 		printf("\n");
