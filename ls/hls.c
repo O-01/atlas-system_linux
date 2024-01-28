@@ -75,7 +75,7 @@ static void manager(char **argv, c_dt cmd, int error_flag)
 		}
 	}
 	else if (!cmd.dir_count && !cmd.file_count && !error_flag)
-		printer_d(NULL, cmd.flags, printed, loop_flag);
+		printer_d(NULL, cmd.flags, printed, loop_flag), printed = 1;
 	if (printed && !print_error)
 		printf("\n");
 }
