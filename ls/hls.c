@@ -88,7 +88,7 @@ static void manager(char **argv, c_dt cmd, int error_flag)
 
 static int arg_munch(char **argv, c_dt *cmd)
 {
-	int iter = 1;
+	int iter = 1, log_error = 0;
 
 	if (!argv || !cmd)
 		return (-1);
@@ -110,13 +110,10 @@ static int arg_munch(char **argv, c_dt *cmd)
 		else
 		{
 			if (logistics(argv[iter], cmd) == -1)
-			{
-				error_dump(argv[0], argv[iter], 2);
-				return (-1);
-			}
+				error_dump(argv[0], argv[iter], 2), log_error = -1;
 		}
 	}
-	return (0);
+	return (log_error);
 }
 
 /**
