@@ -18,7 +18,7 @@ int printer(file_l *list, int flags, int o_p, int loop_flag)
 	DIR *open_up = NULL;
 
 	if (!list)
-		open_up = opendir(".");
+		open_up = opendir("./");
 	else
 		open_up = opendir(list->name);
 	if (!open_up)
