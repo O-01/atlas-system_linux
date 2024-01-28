@@ -29,7 +29,6 @@ int main(const int argc, char **argv)
 	if (cmd.arg_c > 1)
 		if (arg_munch(argv, &cmd) == -1)
 			error_flag = 1;
-	printf("dir count %d, file count %d\n", cmd.dir_count, cmd.file_count);
 	manager(argv, cmd, error_flag);
 	free_cdt(&cmd.dir_list, &cmd.file_list);
 	return (0);
