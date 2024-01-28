@@ -42,40 +42,32 @@ int printer(file_l *list, int flags, int o_p, int loop_flag)
 
 static void printer_loop(DIR *open_up, int flags)
 {
-	struct dirent *read_d = NULL;
-	char *name = NULL, *delim = "  ";
+	struct dirent *re_d = NULL;
+	char *delim = "  ";
 	int printed = 0;
 
 	if (flags & (1 << 0) || flags & (1 << 1))
 		delim = "\n";
-	for (printed = 0; (read_d = readdir(open_up));)
+	for (printed = 0; (re_d = readdir(open_up));)
 	{
-		name = _strdup(read_d->d_name);
-		if (name[0] == '.')
+		if (re_d->d_name[0] == '.')
 		{
-			if (
-				(!name[1] || (name[1] == '.' && !name[2])) &&
+			if ((!re_d->d_name[1] || (re_d->d_name[1] == '.' &&
+					!re_d->d_name[2])) &&
 				!(flags & (1 << 2))
 			)
-			{
-				free(name), name = NULL;
 				continue;
-			}
-			else if (
-				(name[1] || (name[1] == '.' && name[2])) &&
+			else if ((re_d->d_name[1] || (re_d->d_name[1] == '.' &&
+					re_d->d_name[2])) &&
 				!((flags & (1 << 2)) | (flags & (1 << 3)))
 			)
-			{
-				free(name), name = NULL;
 				continue;
-			}
 		}
 		if (printed)
 			printf("%s", delim);
 		if (flags & (1 << 1))
-			l_print(name);
-		printf("%s", name);
-		free(name), name = NULL;
+			l_print(re_d->d_name);
+		printf("%s", re_d->d_name);
 		printed = 1;
 	}
 }
