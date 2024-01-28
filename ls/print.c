@@ -113,7 +113,8 @@ static void l_print(char *file)
 			printf("%d ", extract.st_gid);
 		printf("%ld ", extract.st_size);
 		/* printf("%*ld ", 5, extract.st_size); */
-		printf("%.24s ", ctime(&extract.st_mtime));
+		/* printf("%.24s ", ctime(&extract.st_mtime)); */
+		printf("%.16s ", ctime(&extract.st_mtime));
 	}
 }
 
