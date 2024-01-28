@@ -59,6 +59,7 @@ static void manager(char **argv, c_dt cmd, int error_flag)
 		print_error = printer_d(cmd.dir_list, cmd.flags, printed, loop_flag);
 		if (print_error)
 			error_dump(argv[0], cmd.dir_list->name, print_error);
+		printed = 1;
 	}
 	else if (cmd.dir_count > 1 || cmd.flags & (1 << 7))
 	{
@@ -75,7 +76,7 @@ static void manager(char **argv, c_dt cmd, int error_flag)
 	}
 	else if (!cmd.dir_count && !cmd.file_count && !error_flag)
 		printer_d(NULL, cmd.flags, printed, loop_flag);
-	if (print_error == 0)
+	if (printed && !print_error)
 		printf("\n");
 }
 
