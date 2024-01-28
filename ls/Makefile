@@ -1,6 +1,6 @@
 CC := gcc
 CFLAGS := -Werror -Wall -Wextra -pedantic -std=gnu89
-SRC := hls.c string.c
+SRC := hls.c error.c print.c string.c
 HEAD := hls.h
 OBJ := $(SRC: %.c = %.o)
 NAME := hls

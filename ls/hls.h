@@ -3,6 +3,8 @@
 
 #include <dirent.h>
 #include <errno.h>
+#include <grp.h>
+#include <pwd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
@@ -55,6 +57,10 @@ typedef struct command_data
 	file_l *file_list;
 	int flags;
 } c_dt;
+
+int printer(file_l *list, int flags, int o_p, int o_);
+
+void error_dump(char *exec, char *filename, int code);
 
 char *_strcpy(char *dest, char *src);
 int _strcmp(char *str1, char *str2);

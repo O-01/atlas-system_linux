@@ -57,7 +57,7 @@ int _strlen(char *str)
 
 char *_strdup(char *str)
 {
-	char *copy = 0;
+	char *copy = NULL;
 	int iter_1 = 0, iter_2 = 0;
 
 	if (!str)
