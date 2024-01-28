@@ -1,6 +1,6 @@
 #include "hls.h"
 
-static void manager(char **argv, c_dt cmd);
+static void manager(char **argv, c_dt cmd, int error_flag);
 static int arg_munch(char **argv, c_dt *cmd);
 static int flag_setter(char *flag_string, int *flags);
 static int logistics(char *argument, c_dt *cmd);
@@ -18,6 +18,7 @@ static void free_cdt(dir_l **d_list, file_l **f_list);
 int main(const int argc, char **argv)
 {
 	c_dt cmd;
+	int error_flag = 0;
 
 	cmd.arg_c = argc,
 	cmd.dir_count = 0,
@@ -25,7 +26,10 @@ int main(const int argc, char **argv)
 	cmd.file_count = 0,
 	cmd.file_list = NULL,
 	cmd.flags = 0x00;
-	manager(argv, cmd);
+	if (cmd.arg_c > 1)
+		if (arg_munch(argv, &cmd) == -1)
+			error_flag = 1;
+	manager(argv, cmd, error_flag);
 	free_cdt(&cmd.dir_list, &cmd.file_list);
 	return (0);
 }
@@ -34,19 +38,19 @@ int main(const int argc, char **argv)
  * manager - tells things what they need to do
  * @argv: argument vector passed to program upon launch
  * @cmd: command data struct
+ * @error_flag: flag indicating one or more arguments raised error
 */
 
-static void manager(char **argv, c_dt cmd)
+static void manager(char **argv, c_dt cmd, int error_flag)
 {
 	dir_l *tmp_d;
 	file_l *tmp_f;
-	int printed = 0, loop_flag = 0, print_error = 0;
+	int printed = 0, loop_flag = error_flag, print_error = 0;
 
-	if (cmd.arg_c > 1)
-		if (arg_munch(argv, &cmd) == -1)
-			loop_flag = 1;
 	if (cmd.file_count == 1)
-		printer_f(cmd.file_list, cmd.flags, printed, loop_flag), loop_flag = 1;
+		printer_f(cmd.file_list, cmd.flags, printed, loop_flag),
+		printed = 1,
+		loop_flag = 1;
 	else if (cmd.file_count > 1)
 		for (tmp_f = cmd.file_list, loop_flag = 1; tmp_f; tmp_f = tmp_f->next)
 			printer_f(tmp_f, cmd.flags, printed, loop_flag), printed = 1;
