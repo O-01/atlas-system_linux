@@ -11,6 +11,8 @@ char *_strcpy(char *dest, char *src)
 {
 	int iter = 0;
 
+	if (!dest || !src)
+		return (NULL);
 	for (; src[iter]; iter++)
 		dest[iter] = src[iter];
 	dest[iter] = '\0';
@@ -28,6 +30,8 @@ int _strcmp(char *str1, char *str2)
 {
 	int iter = 0;
 
+	if (!str1 || !str2)
+		return (-1);
 	while (str1[iter] == str2[iter] && (str1[iter] || str2[iter]))
 		iter++;
 	iter = (str1[iter] - str2[iter]);
@@ -44,6 +48,8 @@ int _strlen(char *str)
 {
 	int iter = 0;
 
+	if (!str)
+		return (-1);
 	for (; str[iter]; iter++)
 		;
 	return (iter);
@@ -82,6 +88,8 @@ char *_strcat(char *dest, char *src)
 {
 	int iter_1 = _strlen(dest), iter_2 = 0;
 
+	if (!dest || !src)
+		return (NULL);
 	for (; src[iter_2]; iter_1++, iter_2++)
 		dest[iter_1] = src[iter_2];
 	dest[iter_1] = '\0';

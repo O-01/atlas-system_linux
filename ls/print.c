@@ -6,7 +6,7 @@ static void mode_decoder(mode_t mode, char **file_mode);
 static char *path_prep(char *dir, char *filename);
 
 /**
- * printer - print directory contents
+ * printer_d - print directory contents
  * @list: directory of which contents are to be printed
  * @flags: flags that determine what should be printed
  * @o_p: flag indicates loop has already printed, if applicable
@@ -14,7 +14,7 @@ static char *path_prep(char *dir, char *filename);
  * Return: 2 upon file/directory not found, 13 permission denied, 0 otherwise
 */
 
-int printer(file_l *list, int flags, int o_p, int loop_flag)
+int printer_d(dir_l *list, int flags, int o_p, int loop_flag)
 {
 	DIR *open_up = NULL;
 	char *dir_name = NULL;
@@ -34,6 +34,30 @@ int printer(file_l *list, int flags, int o_p, int loop_flag)
 	printer_loop(open_up, dir_name, flags);
 	closedir(open_up);
 	return (0);
+}
+
+/**
+ * printer_f - print input files
+ * @list: list of input files to print
+ * @flags: flags that determine what should be printed
+ * @o_p: flag indicates loop has already printed, if applicable
+ * @loop_flag: flag indicates loop usage
+*/
+
+void printer_f(file_l *list, int flags, int o_p, int loop_flag)
+{
+	char *delim = "  ";
+
+	if (flags & (1 << 0) || flags & (1 << 1))
+		delim = "\n";
+	if (loop_flag != 0)
+	{
+		if (o_p)
+			printf("%s", delim);
+	}
+	if (flags & (1 << 1))
+		l_print(list->name);
+	printf("%s", list->name);
 }
 
 /**
