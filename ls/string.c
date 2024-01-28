@@ -70,3 +70,20 @@ char *_strdup(char *str)
 		copy[iter_1] = str[iter_1];
 	return (copy);
 }
+
+/**
+ * _strcat - concatenates 2 strings
+ * @dest: string 1 to have src appended to end
+ * @src: string 2 to append to end of dest
+ * Return: dest
+ */
+
+char *_strcat(char *dest, char *src)
+{
+	int iter_1 = _strlen(dest), iter_2 = 0;
+
+	for (; src[iter_2]; iter_1++, iter_2++)
+		dest[iter_1] = src[iter_2];
+	dest[iter_1] = '\0';
+	return (dest);
+}

@@ -1,8 +1,9 @@
 #include "hls.h"
 
-static void printer_loop(DIR *open_up, int flags);
+static void printer_loop(DIR *open_up, char *dir, int flags);
 static void l_print(char *file);
 static void mode_decoder(mode_t mode, char **file_mode);
+static char *path_prep(char *dir, char *filename);
 
 /**
  * printer - print directory contents
@@ -16,11 +17,12 @@ static void mode_decoder(mode_t mode, char **file_mode);
 int printer(file_l *list, int flags, int o_p, int loop_flag)
 {
 	DIR *open_up = NULL;
+	char *dir_name = NULL;
 
 	if (!list)
-		open_up = opendir("./");
+		dir_name = ".", open_up = opendir(dir_name);
 	else
-		open_up = opendir(list->name);
+		dir_name = list->name, open_up = opendir(list->name);
 	if (!open_up)
 		return (errno);
 	if (loop_flag != 0)
@@ -29,7 +31,7 @@ int printer(file_l *list, int flags, int o_p, int loop_flag)
 			printf("\n\n");
 		printf("%s:\n", list->name);
 	}
-	printer_loop(open_up, flags);
+	printer_loop(open_up, dir_name, flags);
 	closedir(open_up);
 	return (0);
 }
@@ -37,13 +39,14 @@ int printer(file_l *list, int flags, int o_p, int loop_flag)
 /**
  * printer_loop - prints what is requested by command
  * @open_up: directory of which contents to be printed
+ * @dir: opened directory name passed for processing as necessary
  * @flags: flags by which format of what is to be printed is determined
 */
 
-static void printer_loop(DIR *open_up, int flags)
+static void printer_loop(DIR *open_up, char *dir, int flags)
 {
 	struct dirent *re_d = NULL;
-	char *delim = "  ";
+	char *delim = "  ", *fuller_path = NULL;
 	int printed = 0;
 
 	if (flags & (1 << 0) || flags & (1 << 1))
@@ -66,7 +69,11 @@ static void printer_loop(DIR *open_up, int flags)
 		if (printed)
 			printf("%s", delim);
 		if (flags & (1 << 1))
-			l_print(re_d->d_name);
+		{
+			fuller_path = path_prep(dir, re_d->d_name);
+			l_print(fuller_path);
+			free(fuller_path), fuller_path = NULL;
+		}
 		printf("%s", re_d->d_name);
 		printed = 1;
 	}
@@ -140,4 +147,29 @@ static void mode_decoder(mode_t mode, char **file_mode)
 			tmp[iter] = '-';
 	}
 	tmp[iter] = '\0';
+}
+
+/**
+ * path_prep - prepares file name to be properly handled by lstat
+ * @dir: directory name
+ * @filename: file name
+ * Return: string containing filename appended to containing dir with '/'
+*/
+
+static char *path_prep(char *dir, char *filename)
+{
+	char *path = NULL;
+
+	if (!dir || !filename)
+		return (NULL);
+	path = malloc(sizeof(char) * (_strlen(dir) + 1 + _strlen(filename)) + 1);
+	if (!path)
+		return (NULL);
+	path[0] = '\0';
+	_strcat(path, dir);
+	if (path[_strlen(dir) - 1] == '/')
+		path[_strlen(dir) - 1] = '\0';
+	_strcat(path, "/");
+	_strcat(path, filename);
+	return (path);
 }
