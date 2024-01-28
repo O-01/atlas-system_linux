@@ -1,5 +1,6 @@
 #include "hls.h"
 
+static void manager(char **argv, c_dt cmd);
 static int arg_munch(char **argv, c_dt *cmd);
 static int flag_setter(char *flag_string, int *flags);
 static int logistics(char *argument, c_dt *cmd);
@@ -17,25 +18,40 @@ static void free_cdt(dir_l **d_list, file_l **f_list);
 int main(const int argc, char **argv)
 {
 	c_dt cmd;
+
+	cmd.arg_c = argc,
+	cmd.dir_count = 0,
+	cmd.dir_list = NULL;
+	cmd.file_count = 0,
+	cmd.file_list = NULL,
+	cmd.flags = 0x00;
+	manager(argv, cmd);
+	free_cdt(&cmd.dir_list, &cmd.file_list);
+	return (0);
+}
+
+/**
+ * manager - tells things what they need to do
+ * @argv: argument vector passed to program upon launch
+ * @cmd: command data struct
+*/
+
+static void manager(char **argv, c_dt cmd)
+{
 	dir_l *tmp_d;
 	file_l *tmp_f;
 	int printed = 0, loop_flag = 0, print_error = 0;
 
-	cmd.arg_c = argc, cmd.dir_count = 0, cmd.dir_list = NULL;
-	cmd.file_count = 0, cmd.file_list = NULL, cmd.flags = 0x00;
-	if (argc > 1)
-		arg_munch(argv, &cmd);
+	if (cmd.arg_c > 1)
+		if (arg_munch(argv, &cmd) == -1)
+			loop_flag = 1;
 	if (cmd.file_count == 1)
-		printer_f(cmd.file_list, cmd.flags, printed, loop_flag), printed = 1;
+		printer_f(cmd.file_list, cmd.flags, printed, loop_flag), loop_flag = 1;
 	else if (cmd.file_count > 1)
-	{
 		for (tmp_f = cmd.file_list, loop_flag = 1; tmp_f; tmp_f = tmp_f->next)
 			printer_f(tmp_f, cmd.flags, printed, loop_flag), printed = 1;
-	}
 	if (cmd.dir_count == 1)
 	{
-		if (printed == 1)
-			loop_flag = 1;
 		print_error = printer_d(cmd.dir_list, cmd.flags, printed, loop_flag);
 		if (print_error)
 			error_dump(argv[0], cmd.dir_list->name, print_error);
@@ -53,19 +69,17 @@ int main(const int argc, char **argv)
 				printed = 1;
 		}
 	}
-	else if (argc == 1)
+	else if (!cmd.dir_count && !cmd.file_count)
 		printer_d(NULL, cmd.flags, printed, loop_flag);
-	free_cdt(&cmd.dir_list, &cmd.file_list);
 	if (print_error == 0)
 		printf("\n");
-	return (0);
 }
 
 /**
  * arg_munch - process arguments by flags &/or directory names
  * @argv: argument vector, passed from main for processing
  * @cmd: command data struct
- * Return: -1 upon NULL input, 0 otherwise
+ * Return: -1 upon NULL input or logistics failure, 0 otherwise
 */
 
 static int arg_munch(char **argv, c_dt *cmd)
@@ -92,7 +106,10 @@ static int arg_munch(char **argv, c_dt *cmd)
 		else
 		{
 			if (logistics(argv[iter], cmd) == -1)
+			{
 				error_dump(argv[0], argv[iter], 2);
+				return (-1);
+			}
 		}
 	}
 	return (0);
