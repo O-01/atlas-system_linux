@@ -84,8 +84,7 @@ typedef struct command_data
 	int flags;
 } c_dt;
 
-int printer_d(dir_l *list, int flags, int o_p, int o_);
-void printer_f(file_l *list, int flags, int o_p, int loop_flag);
+void print_manager(char **argv, c_dt cmd, int error_flag);
 
 void error_dump(char *exec, char *filename, int code);
 

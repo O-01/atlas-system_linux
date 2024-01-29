@@ -1,6 +1,5 @@
 #include "hls.h"
 
-static void manager(char **argv, c_dt cmd, int error_flag);
 static int arg_munch(char **argv, c_dt *cmd);
 static int flag_setter(char *flag_string, int *flags);
 static int logistics(char *argument, c_dt *cmd);
@@ -29,55 +28,9 @@ int main(const int argc, char **argv)
 	if (cmd.arg_c > 1)
 		if (arg_munch(argv, &cmd) == -1)
 			error_flag = 1;
-	manager(argv, cmd, error_flag);
+	print_manager(argv, cmd, error_flag);
 	free_cdt(&cmd.dir_list, &cmd.file_list);
 	return (0);
-}
-
-/**
- * manager - tells things what they need to do
- * @argv: argument vector passed to program upon launch
- * @cmd: command data struct
- * @error_flag: flag indicating one or more arguments has raised error
-*/
-
-static void manager(char **argv, c_dt cmd, int error_flag)
-{
-	dir_l *tmp_d;
-	file_l *tmp_f;
-	int printed = 0, loop_flag = error_flag, print_error = 0;
-
-	if (cmd.file_count == 1)
-		printer_f(cmd.file_list, cmd.flags, printed, loop_flag),
-		printed = 1,
-		loop_flag = 1;
-	else if (cmd.file_count > 1)
-		for (tmp_f = cmd.file_list, loop_flag = 1; tmp_f; tmp_f = tmp_f->next)
-			printer_f(tmp_f, cmd.flags, printed, loop_flag), printed = 1;
-	if (cmd.dir_count == 1)
-	{
-		print_error = printer_d(cmd.dir_list, cmd.flags, printed, loop_flag);
-		if (print_error)
-			error_dump(argv[0], cmd.dir_list->name, print_error);
-		printed = 1;
-	}
-	else if (cmd.dir_count > 1 || cmd.flags & (1 << 7))
-	{
-		if (printed == 1)
-			printf("\n"), printed = 0;
-		for (tmp_d = cmd.dir_list, loop_flag = 1; tmp_d; tmp_d = tmp_d->next)
-		{
-			print_error = printer_d(tmp_d, cmd.flags, printed, loop_flag);
-			if (print_error)
-				error_dump(argv[0], tmp_d->name, print_error);
-			if (!print_error)
-				printed = 1;
-		}
-	}
-	else if (!cmd.dir_count && !cmd.file_count && !error_flag)
-		printer_d(NULL, cmd.flags, printed, loop_flag), printed = 1;
-	if (printed && !print_error)
-		printf("\n");
 }
 
 /**

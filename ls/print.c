@@ -1,9 +1,57 @@
 #include "hls.h"
 
+static int printer_d(dir_l *list, int flags, int o_p, int loop_flag);
+static void printer_f(file_l *list, int flags, int o_p, int loop_flag);
 static void printer_loop(DIR *open_up, char *dir, int flags);
 static void l_print(char *file);
 static void mode_decoder(mode_t mode, char **file_mode);
 static char *path_prep(char *dir, char *filename);
+
+/**
+ * print_manager - tells things what they need to do
+ * @argv: argument vector passed to program upon launch
+ * @cmd: command data struct
+ * @error_flag: flag indicating one or more arguments has raised error
+*/
+
+void print_manager(char **argv, c_dt cmd, int error_flag)
+{
+	dir_l *tmp_d;
+	file_l *tmp_f;
+	int printed = 0, loop_flag = error_flag, print_error = 0;
+
+	if (cmd.file_count == 1)
+		printer_f(cmd.file_list, cmd.flags, printed, loop_flag),
+		printed = 1,
+		loop_flag = 1;
+	else if (cmd.file_count > 1)
+		for (tmp_f = cmd.file_list, loop_flag = 1; tmp_f; tmp_f = tmp_f->next)
+			printer_f(tmp_f, cmd.flags, printed, loop_flag), printed = 1;
+	if (cmd.dir_count == 1)
+	{
+		print_error = printer_d(cmd.dir_list, cmd.flags, printed, loop_flag);
+		if (print_error)
+			error_dump(argv[0], cmd.dir_list->name, print_error);
+		printed = 1;
+	}
+	else if (cmd.dir_count > 1 || cmd.flags & (1 << 7))
+	{
+		if (printed == 1)
+			printf("\n"), printed = 0;
+		for (tmp_d = cmd.dir_list, loop_flag = 1; tmp_d; tmp_d = tmp_d->next)
+		{
+			print_error = printer_d(tmp_d, cmd.flags, printed, loop_flag);
+			if (print_error)
+				error_dump(argv[0], tmp_d->name, print_error);
+			if (!print_error)
+				printed = 1;
+		}
+	}
+	else if (!cmd.dir_count && !cmd.file_count && !error_flag)
+		printer_d(NULL, cmd.flags, printed, loop_flag), printed = 1;
+	if (printed && !print_error)
+		printf("\n");
+}
 
 /**
  * printer_d - print directory contents
@@ -14,7 +62,7 @@ static char *path_prep(char *dir, char *filename);
  * Return: 2 upon file/directory not found, 13 permission denied, 0 otherwise
 */
 
-int printer_d(dir_l *list, int flags, int o_p, int loop_flag)
+static int printer_d(dir_l *list, int flags, int o_p, int loop_flag)
 {
 	DIR *open_up = NULL;
 	char *dir_name = NULL;
@@ -44,7 +92,7 @@ int printer_d(dir_l *list, int flags, int o_p, int loop_flag)
  * @loop_flag: flag indicates loop usage
 */
 
-void printer_f(file_l *list, int flags, int o_p, int loop_flag)
+static void printer_f(file_l *list, int flags, int o_p, int loop_flag)
 {
 	char *delim = "  ";
 
