@@ -5,7 +5,6 @@ static void printer_f(file_l *list, int flags, int o_p, int loop_flag);
 static void printer_loop(DIR *open_up, char *dir, int flags);
 static void l_print(char *file);
 static void mode_decoder(mode_t mode, char **file_mode);
-static char *path_prep(char *dir, char *filename);
 
 /**
  * print_manager - tells things what they need to do
@@ -79,7 +78,10 @@ static int printer_d(dir_l *list, int flags, int o_p, int loop_flag)
 			printf("\n\n");
 		printf("%s:\n", list->name);
 	}
-	printer_loop(open_up, dir_name, flags);
+	if (flags & (1 << 4) || flags & (1 << 5) || flags & (1 << 6))
+		sort_dir(open_up, dir_name, flags);
+	else
+		printer_loop(open_up, dir_name, flags);
 	closedir(open_up);
 	return (0);
 }
@@ -229,7 +231,7 @@ static void mode_decoder(mode_t mode, char **file_mode)
  * Return: string containing filename appended to containing dir with '/'
 */
 
-static char *path_prep(char *dir, char *filename)
+char *path_prep(char *dir, char *filename)
 {
 	char *path = NULL;
 

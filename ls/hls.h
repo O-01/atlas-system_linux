@@ -22,14 +22,6 @@
 typedef struct dir_list
 {
 	char *name;
-	/* int is_dir; */
-	/* mode_t mode; */
-	/* char *mode_decode; */
-	/* nlink_t links; */
-	/* uid_t owner_id; */
-	/* gid_t owner_gp; */
-	/* off_t size; */
-	/* time_t mtime; */
 	struct dir_list *next;
 	struct dir_list *prev;
 } dir_l;
@@ -44,13 +36,6 @@ typedef struct dir_list
 typedef struct file_list
 {
 	char *name;
-	/* mode_t mode; */
-	/* char *mode_decode; */
-	/* nlink_t links; */
-	/* uid_t owner_id; */
-	/* gid_t owner_gp; */
-	/* off_t size; */
-	/* time_t mtime; */
 	struct file_list *next;
 	struct file_list *prev;
 } file_l;
@@ -84,14 +69,35 @@ typedef struct command_data
 	int flags;
 } c_dt;
 
-void print_manager(char **argv, c_dt cmd, int error_flag);
+typedef struct sorted_dt
+{
+	char *name;
+	int is_dir;
+	mode_t mode;
+	nlink_t links;
+	uid_t owner_id;
+	gid_t owner_gp;
+	off_t size;
+	time_t mtime;
+	struct s_dt *next;
+	struct s_dt *prev;
+} s_dt;
 
+/* print.c */
+void print_manager(char **argv, c_dt cmd, int error_flag);
+char *path_prep(char *dir, char *filename);
+
+/* error.c */
 void error_dump(char *exec, char *filename, int code);
 
+/* string.c */
 char *_strcpy(char *dest, char *src);
 int _strcmp(char *str1, char *str2);
 int _strlen(char *str);
 char *_strdup(char *str);
 char *_strcat(char *dest, char *src);
+
+/* sort.c */
+int sort_dir(DIR *open_up, char *dir, int flags);
 
 #endif
