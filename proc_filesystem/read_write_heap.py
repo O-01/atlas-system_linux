@@ -59,7 +59,6 @@ if __name__ == "__main__":
             mem.write(b'\0')
         print(f"[~] \"{argv[3]}\" WRITTEN AT {hex(address)}")
     else:
-        mem.close()
-        exit(f"[~] \"{argv[2]}\" NOT FOUND")
+        print(f"[~] \"{argv[2]}\" NOT FOUND")
     mem.close()
-    exit("[~] SUCCESS \\o/")
+    exit()
