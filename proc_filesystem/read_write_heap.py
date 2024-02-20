@@ -17,12 +17,12 @@ if __name__ == "__main__":
 
     if len(argv) != 4 or len(argv[2]) < len(argv[3]):
         exit("Usage: ./read_write_heap.py pid search_string replace_string")
+    pid = int(argv[1])
     try:
-        os.kill(int(argv[1]), 0)
+        os.kill(pid, 0)
     except OSError:
         exit("PID not found")
-    print(f"[~] PID : {int(argv[1])}")
-    pid = int(argv[1])
+    print(f"[~] PID : {pid}")
     search_str = argv[2].encode()
     replace_str = argv[3].encode()
     try:
