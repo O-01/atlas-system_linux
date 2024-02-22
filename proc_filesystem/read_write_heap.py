@@ -30,10 +30,10 @@ if __name__ == "__main__":
     except FileNotFoundError as err:
         exit(err)
     for line in maps:
-        if re.search(r"^(.*\[heap\])$", line):
+        if re.search(r"^.*\[heap\]$", line):
             print("[~] HEAP LOCATED")
             heap, perms, off, dev, inode, path_ = line.split(" ", maxsplit=5)
-            path = path_.split(" ")[len(path_.split(" ")) - 1][:-1]
+            path = path_.strip()
             print(f"\tPATHNAME: {path}")
             print(f"\tADDRESS RANGE: {heap}")
             print(f"\tPERMISSIONS: {perms}")
