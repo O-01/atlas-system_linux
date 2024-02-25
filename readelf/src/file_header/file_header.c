@@ -81,7 +81,7 @@ static void data_(char *fd_map)
 			printf("2's complement, little endian");
 		break;
 		case ELFDATA2MSB:
-			printf("2's complement,  big endian");
+			printf("2's complement, big endian");
 		break;
 		default:
 			break;

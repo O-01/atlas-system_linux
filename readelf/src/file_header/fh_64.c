@@ -79,7 +79,9 @@ static void machine_64(Elf64_Ehdr *map_64)
 		case EM_X86_64:
 			printf("Advanced Micro Devices X86-64");
 		break;
-		/* possibly add more later */
+		case EM_SPARC:
+			printf("Sparc");
+		break;
 		default:
 			break;
 	}

@@ -78,7 +78,9 @@ static void machine_32(Elf32_Ehdr *map_32)
 		case EM_386:
 			printf("Intel 80386");
 		break;
-		/* possibly add more later */
+		case EM_SPARC:
+			printf("Sparc");
+		break;
 		default:
 			break;
 	}
