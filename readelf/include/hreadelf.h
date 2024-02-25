@@ -12,9 +12,25 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+/**
+ * struct program_data - records program reference information
+ * @name: name of program
+ * @fd: file descriptor of input file, if opened
+ * @endianness: endianness of input file
+*/
+
+typedef struct program_data
+{
+	char *name;
+	int fd;
+	int endianness;
+} prog_dt;
+
+extern prog_dt prog;
+
 /* common.c */
 int is_elf(char *fd_map);
-void error_manager(int fd, char *cause, int err);
+void error_manager(char *cause, int err);
 
 /** 0-hreadelf **/
 /* file_header.c */

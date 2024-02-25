@@ -16,7 +16,8 @@ int file_header(char *fd_map)
 {
 	if (!is_elf(fd_map))
 	{
-		fprintf(stderr, "FILE NOT ELF");
+		fprintf(stderr, "%s: Error: Not an ELF file - %s",
+			prog.name, "it has the wrong magic bytes at the start");
 		return (0);
 	}
 	printf("ELF Header:\n");
@@ -62,6 +63,10 @@ static void class_(char *fd_map)
 		case ELFCLASS64:
 			printf("ELF64");
 		break;
+		case ELFCLASSNONE:
+			fprintf(stderr, "%s: Error: Invalid data encoding\n", prog.name);
+			error_manager(NULL, 1);
+		break;
 		default:
 			break;
 	}
@@ -79,9 +84,15 @@ static void data_(char *fd_map)
 	{
 		case ELFDATA2LSB:
 			printf("2's complement, little endian");
+			prog.endianness = ELFDATA2LSB;
 		break;
 		case ELFDATA2MSB:
 			printf("2's complement, big endian");
+			prog.endianness = ELFDATA2MSB;
+		break;
+		case ELFDATANONE:
+			fprintf(stderr, "%s: Error: Invalid class\n", prog.name);
+			error_manager(NULL, 1);
 		break;
 		default:
 			break;
@@ -102,7 +113,8 @@ static void version_(char *fd_map)
 			printf("%d (current)", fd_map[EI_VERSION]);
 		break;
 		case EV_NONE:
-			printf("Invalid version");
+			fprintf(stderr, "%s: Error: Invalid ELF version\n", prog.name);
+			error_manager(NULL, 1);
 		break;
 		default:
 			printf("Unknown version");
