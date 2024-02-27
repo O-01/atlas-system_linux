@@ -30,10 +30,10 @@ $(BUILD_DIR)/%.o : %.c
 	$(CC) $(CFLAGS) $^ -g -o $@-debug
 
 1-hreadelf: $(SRC_DIR)/1.c
-	$(CC) $(CFLAGS) -I$(INC_DIR) $^ -o $@
+	$(CC) $(CFLAGS) $^ -o $@
 
 2-hreadelf: $(SRC_DIR)/2.c
-	$(CC) $(CFLAGS) -I$(INC_DIR) $^ -o $@
+	$(CC) $(CFLAGS) $^ -o $@
 
 clean:
 	$(RM) -f *-hreadelf *-hreadelf-debug
