@@ -7,7 +7,7 @@ SRC_DIR := src
 FH_NAME := file_header
 FH_DIR := $(SRC_DIR)/$(FH_NAME)
 
-SRC := $(wildcard $(SRC_DIR)/*.c)
+SRC := $(filter-out src/1.c src/2.c, $(wildcard $(SRC_DIR)/*.c))
 FH_SRC := $(wildcard $(FH_DIR)/*.c)
 
 OBJ := $(addprefix $(BUILD_DIR)/, $(patsubst %.c, %.o, $(notdir $(SRC))))
@@ -29,10 +29,10 @@ $(BUILD_DIR)/%.o : %.c
 0-hreadelf-debug:
 	$(CC) $(CFLAGS) $^ -g -o $@-debug
 
-1-hreadelf: $(OBJ)
+1-hreadelf: $(SRC_DIR)/1.c
 	$(CC) $(CFLAGS) $^ -o $@
 
-2-hreadelf: $(OBJ)
+2-hreadelf: $(SRC_DIR)/2.c
 	$(CC) $(CFLAGS) $^ -o $@
 
 clean:
