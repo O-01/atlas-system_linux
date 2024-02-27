@@ -29,11 +29,15 @@ $(BUILD_DIR)/%.o : %.c
 0-hreadelf-debug:
 	$(CC) $(CFLAGS) $^ -g -o $@-debug
 
-1-hreadelf: $(SRC_DIR)/1.c
-	$(CC) $(CFLAGS) $^ -o $@
+1-hreadelf:
+	@echo -e '#!/bin/bash\n' > $@
+	@echo 'readelf -W -S $$1' >> $@
+	chmod u+x -v $@
 
-2-hreadelf: $(SRC_DIR)/2.c
-	$(CC) $(CFLAGS) $^ -o $@
+2-hreadelf:
+	@echo -e '#!/bin/bash\n' > $@
+	@echo 'readelf -W -l $$1' >> $@
+	chmod u+x -v $@
 
 clean:
 	$(RM) -f *-hreadelf *-hreadelf-debug
