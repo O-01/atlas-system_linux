@@ -10,17 +10,10 @@
 */
 int main(__attribute__((unused)) int argc, char **argv)
 {
-	FILE *pipe_stream;
-	size_t line_len = 0;
-	char *line = NULL;
-	char command[128];
+	char *command[] = {"readelf", "-W", "-S", "", NULL};
 
-	sprintf(command, "/usr/bin/readelf -W -S %s", argv[1]);
-	pipe_stream = popen(command, "r");
-	if (!pipe_stream)
+	command[3] = argv[1];
+	if (execvp(command[0], command) == -1)
 		return (1);
-	while (getline(&line, &line_len, pipe_stream) != -1)
-		printf("%s", line);
-	pclose(pipe_stream);
 	return (0);
 }
