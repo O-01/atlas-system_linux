@@ -8,12 +8,12 @@
  * @argv: vector of arguments to program upon launch
  * Return: 0 upon success
 */
-int main(__attribute__((unused)) int argc, char **argv)
+int main(__attribute__((unused)) int argc, char **argv, char **envp)
 {
-	char *command[] = {"readelf", "-W", "-S", "", NULL};
+	char *command[] = {"/usr/bin/readelf", "-W", "-S", "", NULL};
 
 	command[3] = argv[1];
-	if (execvp(command[0], command) == -1)
+	if (execve(command[0], command, envp) == -1)
 		return (1);
 	return (0);
 }
