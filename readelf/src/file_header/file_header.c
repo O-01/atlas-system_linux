@@ -2,8 +2,9 @@
 
 static void magic_(char *fd_map);
 static void class_(char *fd_map);
-static void osabi_(char *fd_map);
+static void data_(char *fd_map);
 static void version_(char *fd_map);
+static void osabi_(char *fd_map);
 
 /**
  * file_header - manages print of file header information from input file
@@ -43,7 +44,7 @@ static void magic_(char *fd_map)
 	int iter = 0;
 
 	for (; iter != EI_NIDENT; iter++)
-		printf("%02x ", fd_map[iter]);
+		printf("%.2x ", fd_map[iter]);
 	putchar('\n');
 }
 
@@ -63,11 +64,38 @@ static void class_(char *fd_map)
 			printf("ELF64");
 		break;
 		case ELFCLASSNONE:
-			fprintf(stderr, "%s: Error: Invalid data encoding\n", prog.name);
-			error_manager(NULL, 1);
+			printf("none");
 		break;
 		default:
-			break;
+			printf("<unknown: %x>", fd_map[EI_CLASS]);
+		break;
+	}
+	putchar('\n');
+}
+
+/**
+ * data_ - prints endianness of ELF file
+ * @fd_map: mmap of input ELF file
+*/
+
+static void data_(char *fd_map)
+{
+	switch (fd_map[EI_DATA])
+	{
+		case ELFDATA2LSB:
+			printf("2's complement, little endian");
+			prog.endianness = ELFDATA2LSB;
+		break;
+		case ELFDATA2MSB:
+			printf("2's complement, big endian");
+			prog.endianness = ELFDATA2MSB;
+		break;
+		case ELFDATANONE:
+			printf("none");
+		break;
+		default:
+			printf("<unknown: %x>", fd_map[EI_DATA]);
+		break;
 	}
 	putchar('\n');
 }
@@ -89,7 +117,7 @@ static void version_(char *fd_map)
 			error_manager(NULL, 1);
 		break;
 		default:
-			printf("Unknown version");
+			printf("<unknown: %x>", fd_map[EI_VERSION]);
 		break;
 	}
 	putchar('\n');

@@ -46,7 +46,7 @@ static void type_64(Elf64_Ehdr *map_64)
 	switch (map_64->e_type)
 	{
 		case ET_NONE:
-			printf("Unknown type");
+			printf("NONE (None)");
 		break;
 		case ET_REL:
 			printf("REL (Relocatable file)");
@@ -55,8 +55,8 @@ static void type_64(Elf64_Ehdr *map_64)
 			printf("EXEC (Executable file)");
 		break;
 		case ET_DYN:
-			/* printf("DYN (Shared object file)"); */
-			printf("DYN (Position-Independent Executable file)");
+			printf("DYN (Shared object file)");
+			/* printf("DYN (Position-Independent Executable file)"); */
 		break;
 		case ET_CORE:
 			printf("CORE (Core file)");
@@ -83,7 +83,8 @@ static void machine_64(Elf64_Ehdr *map_64)
 			printf("Sparc");
 		break;
 		default:
-			break;
+			printf("WIP");
+		break;
 	}
 	putchar('\n');
 }

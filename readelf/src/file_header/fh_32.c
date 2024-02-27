@@ -46,7 +46,7 @@ static void type_32(Elf32_Ehdr *map_32)
 	switch (map_32->e_type)
 	{
 		case ET_NONE:
-			printf("Unknown type");
+			printf("NONE (None)");
 		break;
 		case ET_REL:
 			printf("REL (Relocatable file)");
@@ -82,7 +82,8 @@ static void machine_32(Elf32_Ehdr *map_32)
 			printf("Sparc");
 		break;
 		default:
-			break;
+			printf("WIP");
+		break;
 	}
 	putchar('\n');
 }

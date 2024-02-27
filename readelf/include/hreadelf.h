@@ -31,7 +31,6 @@ extern prog_dt prog;
 /* common.c */
 int is_elf(char *fd_map);
 void error_manager(char *cause, int err);
-void data_(char *fd_map);
 
 /** 0-hreadelf **/
 /* file_header.c */
