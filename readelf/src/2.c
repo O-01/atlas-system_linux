@@ -1,6 +1,4 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
+#include "hreadelf.h"
 
 /**
  * main - entry to program
