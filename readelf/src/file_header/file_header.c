@@ -154,7 +154,8 @@ static void osabi_(char *fd_map)
 			printf("UNIX - ARM");
 		break;
 		default:
-			break;
+			printf("<unknown: %x>", fd_map[EI_OSABI]);
+		break;
 	}
 	putchar('\n');
 }
