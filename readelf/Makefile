@@ -26,6 +26,9 @@ $(BUILD_DIR)/%.o : %.c
 0-hreadelf: $(OBJ) $(FH_OBJ)
 	$(CC) $(CFLAGS) $^ -o $@
 
+0-hreadelf-debug:
+	$(CC) $(CFLAGS) $^ -g -o $@-debug
+
 1-hreadelf: $(OBJ)
 	$(CC) $(CFLAGS) $^ -o $@
 
@@ -33,7 +36,7 @@ $(BUILD_DIR)/%.o : %.c
 	$(CC) $(CFLAGS) $^ -o $@
 
 clean:
-	$(RM) -f 0-hreadelf 1-hreadelf 2-hreadelf
+	$(RM) -f *-hreadelf *-hreadelf-debug
 	$(RM) -r $(BUILD_DIR)
 
 .PHONY: clean
