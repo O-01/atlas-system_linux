@@ -39,7 +39,7 @@ int main(int argc, char **argv)
 			}
 			endianer(elfen.fh64.e_ident[EI_DATA]);
 			if (!file_header(&elfen))
-				error_manager(3, 1);
+				error_manager(0, 1);
 		}
 	}
 	else

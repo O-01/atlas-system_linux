@@ -137,6 +137,52 @@ void convert_sh_endian_64(Elf64_Shdr *sh_64, uint16_t shnum)
 }
 
 /**
+ * convert_ph_endian_32 - converts 32-bit ELF program header info from little
+ *                        endian to big endian or vice-versa
+ * @ph_32: Elf32_Shdr info struct for 32-bit input file
+ * @phnum: number of entries in program header
+*/
+void convert_ph_endian_32(Elf32_Phdr *ph_32, uint16_t phnum)
+{
+	uint16_t iter = 0;
+
+	for (; iter != phnum; iter++)
+	{
+		ph_32[iter].p_flags = bswap32(ph_32[iter].p_flags);
+		ph_32[iter].p_type = bswap32(ph_32[iter].p_type);
+		ph_32[iter].p_offset = bswap32(ph_32[iter].p_offset);
+		ph_32[iter].p_vaddr = bswap32(ph_32[iter].p_vaddr);
+		ph_32[iter].p_paddr = bswap32(ph_32[iter].p_paddr);
+		ph_32[iter].p_filesz = bswap32(ph_32[iter].p_filesz);
+		ph_32[iter].p_memsz = bswap32(ph_32[iter].p_memsz);
+		ph_32[iter].p_align = bswap32(ph_32[iter].p_align);
+	}
+}
+
+/**
+ * convert_ph_endian_64 - converts 64-bit ELF program header info from little
+ *                        endian to big endian or vice-versa
+ * @ph_64: Elf64_Shdr info struct for 64-bit input file
+ * @phnum: number of entries in program header
+*/
+void convert_ph_endian_64(Elf64_Phdr *ph_64, uint16_t phnum)
+{
+	uint16_t iter = 0;
+
+	for (; iter != phnum; iter++)
+	{
+		ph_64[iter].p_flags = bswap32(ph_64[iter].p_flags);
+		ph_64[iter].p_type = bswap32(ph_64[iter].p_type);
+		ph_64[iter].p_offset = bswap32(ph_64[iter].p_offset);
+		ph_64[iter].p_vaddr = bswap32(ph_64[iter].p_vaddr);
+		ph_64[iter].p_paddr = bswap32(ph_64[iter].p_paddr);
+		ph_64[iter].p_filesz = bswap32(ph_64[iter].p_filesz);
+		ph_64[iter].p_memsz = bswap32(ph_64[iter].p_memsz);
+		ph_64[iter].p_align = bswap32(ph_64[iter].p_align);
+	}
+}
+
+/**
  * bswap16 - converts endianness of unsigned 16-bit integer
  * @num: number to be converted
  * Return: converted number

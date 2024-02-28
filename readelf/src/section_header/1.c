@@ -39,7 +39,7 @@ int main(int argc, char **argv)
 			}
 			endianer(elfen.fh64.e_ident[EI_DATA]);
 			if (!section_header(&elfen))
-				error_manager(3, 1);
+				error_manager(0, 1);
 		}
 	}
 	else
@@ -86,16 +86,15 @@ static int section_header(elf_dt *elfen)
 	{
 		if (prog.endianness == MSB)
 			convert_fh_endian_32(&elfen->fh32);
-		if (sh_details_32(elfen))
+		if (!sh_details_32(elfen))
 			return (0);
 	}
 	else if (prog.fclass == ELFCLASS64)
 	{
 		if (prog.endianness == MSB)
 			convert_fh_endian_64(&elfen->fh64);
-		if (sh_details_64(elfen))
+		if (!sh_details_64(elfen))
 			return (0);
 	}
 	return (1);
 }
-
