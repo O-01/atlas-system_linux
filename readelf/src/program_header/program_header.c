@@ -27,7 +27,7 @@ int ph_details_32(elf_dt *elfen)
 	int iter = 0;
 	char *str_table = NULL;
 
-	if (!elfen->fh32.e_shnum)
+	if (!elfen->fh32.e_phnum)
 	{
 		printf("\nThere are no program headers in this file.\n");
 		return (1);
@@ -79,7 +79,7 @@ int ph_details_64(elf_dt *elfen)
 	int iter = 0;
 	char *str_table = NULL;
 
-	if (!elfen->fh64.e_shnum)
+	if (!elfen->fh64.e_phnum)
 	{
 		printf("\nThere are no program headers in this file.\n");
 		return (1);
