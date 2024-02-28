@@ -24,20 +24,20 @@ int main(int argc, char **argv)
 		prog.fd = open(argv[1], O_RDONLY);
 		if (prog.fd == -1)
 			error_manager(1, 1);
-		rd = read(prog.fd, &elfen.elf64, sizeof(elfen.elf64));
-		if (rd != sizeof(elfen.elf64) || !is_elf((char *)&elfen.elf64))
+		rd = read(prog.fd, &elfen.fh64, sizeof(elfen.fh64));
+		if (rd != sizeof(elfen.fh64) || !is_elf((char *)&elfen.fh64))
 			error_manager(2, 1);
 		else
 		{
-			classer(elfen.elf64.e_ident[EI_CLASS]);
+			classer(elfen.fh64.e_ident[EI_CLASS]);
 			if (prog.fclass == ELFCLASS32)
 			{
 				lseek(prog.fd, 0, SEEK_SET);
-				rd = read(prog.fd, &elfen.elf32, sizeof(elfen.elf32));
-				if (rd != sizeof(elfen.elf32) || !is_elf((char *)&elfen.elf32))
+				rd = read(prog.fd, &elfen.fh32, sizeof(elfen.fh32));
+				if (rd != sizeof(elfen.fh32) || !is_elf((char *)&elfen.fh32))
 					error_manager(2, 1);
 			}
-			endianer(elfen.elf64.e_ident[EI_DATA]);
+			endianer(elfen.fh64.e_ident[EI_DATA]);
 			if (!file_header(&elfen))
 				error_manager(3, 1);
 		}
@@ -84,14 +84,14 @@ static int file_header(elf_dt *elfen)
 	if (prog.fclass == ELFCLASS32)
 	{
 		if (prog.endianness == MSB)
-			convert_endian_32(&elfen->elf32);
-		fh_details_32(&elfen->elf32);
+			convert_fh_endian_32(&elfen->fh32);
+		fh_details_32(&elfen->fh32);
 	}
 	else if (prog.fclass == ELFCLASS64)
 	{
 		if (prog.endianness == MSB)
-			convert_endian_64(&elfen->elf64);
-		fh_details_64(&elfen->elf64);
+			convert_fh_endian_64(&elfen->fh64);
+		fh_details_64(&elfen->fh64);
 	}
 	return (1);
 }

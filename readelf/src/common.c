@@ -43,11 +43,11 @@ void error_manager(int cause, int err)
 }
 
 /**
- * convert_endian_32 - converts 32-bit ELF file info from little endian to big
- *                     endian or vice-versa
+ * convert_fh_endian_32 - converts 32-bit ELF file header info from little
+ *                        endian to big endian or vice-versa
  * @map_32: Elf32_Ehdr info struct for 32-bit input file
 */
-void convert_endian_32(Elf32_Ehdr *map_32)
+void convert_fh_endian_32(Elf32_Ehdr *map_32)
 {
 	map_32->e_type = bswap16(map_32->e_type);
 	map_32->e_machine = bswap16(map_32->e_machine);
@@ -65,11 +65,11 @@ void convert_endian_32(Elf32_Ehdr *map_32)
 }
 
 /**
- * convert_endian_64 - converts 32-bit ELF file info from little endian to big
- *                     endian or vice-versa
+ * convert_fh_endian_64 - converts 64-bit ELF file header info from little
+ *                        endian to big endian or vice-versa
  * @map_64: Elf64_Ehdr info struct for 64-bit input file
 */
-void convert_endian_64(Elf64_Ehdr *map_64)
+void convert_fh_endian_64(Elf64_Ehdr *map_64)
 {
 	map_64->e_type = bswap16(map_64->e_type);
 	map_64->e_machine = bswap16(map_64->e_machine);
@@ -84,6 +84,56 @@ void convert_endian_64(Elf64_Ehdr *map_64)
 	map_64->e_shentsize = bswap16(map_64->e_shentsize);
 	map_64->e_shnum = bswap16(map_64->e_shnum);
 	map_64->e_shstrndx = bswap16(map_64->e_shstrndx);
+}
+
+/**
+ * convert_sh_endian_32 - converts 32-bit ELF section header info from little
+ *                        endian to big endian or vice-versa
+ * @sh_32: Elf32_Shdr info struct for 32-bit input file
+ * @shnum: number of entries in section header
+*/
+void convert_sh_endian_32(Elf32_Shdr *sh_32, uint16_t shnum)
+{
+	uint16_t iter = 0;
+
+	for (; iter != shnum; iter++)
+	{
+		sh_32[iter].sh_name = bswap32(sh_32[iter].sh_name);
+		sh_32[iter].sh_type = bswap32(sh_32[iter].sh_type);
+		sh_32[iter].sh_flags = bswap32(sh_32[iter].sh_flags);
+		sh_32[iter].sh_addr = bswap32(sh_32[iter].sh_addr);
+		sh_32[iter].sh_offset = bswap32(sh_32[iter].sh_offset);
+		sh_32[iter].sh_size = bswap32(sh_32[iter].sh_size);
+		sh_32[iter].sh_link = bswap32(sh_32[iter].sh_link);
+		sh_32[iter].sh_info = bswap32(sh_32[iter].sh_info);
+		sh_32[iter].sh_addralign = bswap32(sh_32[iter].sh_addralign);
+		sh_32[iter].sh_entsize = bswap32(sh_32[iter].sh_entsize);
+	}
+}
+
+/**
+ * convert_sh_endian_64 - converts 64-bit ELF section header info from little
+ *                        endian to big endian or vice-versa
+ * @sh_64: Elf64_Shdr info struct for 64-bit input file
+ * @shnum: number of entries in section header
+*/
+void convert_sh_endian_64(Elf64_Shdr *sh_64, uint16_t shnum)
+{
+	uint16_t iter = 0;
+
+	for (; iter != shnum; iter++)
+	{
+		sh_64[iter].sh_name = bswap32(sh_64[iter].sh_name);
+		sh_64[iter].sh_type = bswap32(sh_64[iter].sh_type);
+		sh_64[iter].sh_flags = bswap64(sh_64[iter].sh_flags);
+		sh_64[iter].sh_addr = bswap64(sh_64[iter].sh_addr);
+		sh_64[iter].sh_offset = bswap64(sh_64[iter].sh_offset);
+		sh_64[iter].sh_size = bswap64(sh_64[iter].sh_size);
+		sh_64[iter].sh_link = bswap32(sh_64[iter].sh_link);
+		sh_64[iter].sh_info = bswap32(sh_64[iter].sh_info);
+		sh_64[iter].sh_addralign = bswap64(sh_64[iter].sh_addralign);
+		sh_64[iter].sh_entsize = bswap64(sh_64[iter].sh_entsize);
+	}
 }
 
 /**
