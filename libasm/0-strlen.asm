@@ -1,6 +1,6 @@
 BITS 64
 
-	global strlen
+	global asm_strlen
 
 	section .text
 
@@ -9,3 +9,17 @@ BITS 64
 	; Return: length of input string
 
 asm_strlen:
+	push rbp
+	mov rbp, rsp
+	mov rax, 0
+
+asm_strlen_loopin_time:
+	cmp byte [rdi + rax], 0
+	je asm_strlen_done
+	inc rax
+	jmp asm_strlen_loopin_time
+
+asm_strlen_done:
+	mov rsp, rbp
+	pop rbp
+	ret
