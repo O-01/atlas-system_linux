@@ -24,12 +24,12 @@ asm_strncmp_while:
 	je asm_strncmp_equal
 	movzx eax, byte [rdi]
 	movzx ebx, byte [rsi]
-	inc rdi
-	inc rsi
 	cmp al, 0
 	je asm_strncmp_inequal_or_null
 	cmp al, bl
 	jnz asm_strncmp_inequal_or_null
+	inc rdi
+	inc rsi
 	dec rdx
 	jmp asm_strncmp_while
 
