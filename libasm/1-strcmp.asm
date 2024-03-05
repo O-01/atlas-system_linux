@@ -10,7 +10,7 @@ BITS 64
 	; Description: Compares bytes of 2 strings & returns value upon reaching
 	;              inequal byte or end of either string
 	; Return:
-	;     1: byte in s1 greater than that of s2 
+	;     1: byte in s1 greater than that of s2
 	;    -1: byte in s1 less than that of s2
 	;     0: reached end of both strings (equal length), all bytes match
 
