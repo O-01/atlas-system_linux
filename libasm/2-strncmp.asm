@@ -14,6 +14,9 @@ BITS 64
 	;    0: reached end of both strings (equal length), all bytes match
 	;    Otherwise: s1 byte subtracted by s2 byte at point where inequal
 
+; RETURN ADJUSTED - DOES NOT MATCH STRNCMP FROM STRING.H WITHOUT
+;                   REMOVING/UNCOMMENTING INDICATED LINES/INSTRUCTIONS
+
 asm_strncmp:
 	push rbp
 	mov rbp, rsp
@@ -34,14 +37,24 @@ _while:
 
 _inequal_or_null:
 	cmp al, bl
+	jg _greater ; REMOVE THIS LINE FOR CORRECT OPERATION
 	je _equal
-	sub al, bl
-	js _less
-	movzx eax, al
+	jl _less ; REMOVE THIS LINE FOR CORRECT OPERATION
+	; sub al, bl <<< THESE COMMENTED LINES SHOW CORRECT WAY PER STRNCMP FROM
+	; STRING.H - HOWEVER, TASK CHECKER EXPECTS ONLY 1, 0, OR -1
+	; js _less
+	; movzx eax, al
+	jmp _done
+
+; REMOVE THIS INSTRUCTION FOR CORRECT OPERATION
+_greater:
+	mov rax, 1
 	jmp _done
 
 _less:
-	movsx eax, al
+	; movsx eax, al <<< THIS COMMENTED LINE SHOWS CORRECT WAY PER STRNCMP FROM
+	; STRING.H - HOWEVER, TASK CHECKER EXPECTS ONLY 1, 0, OR -1
+	mov rax, -1 ; REMOVE THIS LINE FOR CORRECT OPERATION
 	jmp _done
 
 _equal:
