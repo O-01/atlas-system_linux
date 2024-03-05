@@ -14,13 +14,13 @@ asm_strlen:
 	mov rbp, rsp
 	mov rax, 0
 
-asm_strlen_loopin_time:
+_loopin_time:
 	cmp byte [rdi + rax], 0
-	je asm_strlen_done
+	je _done
 	inc rax
-	jmp asm_strlen_loopin_time
+	jmp _loopin_time
 
-asm_strlen_done:
+_done:
 	mov rsp, rbp
 	pop rbp
 	ret

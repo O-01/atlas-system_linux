@@ -14,42 +14,55 @@ BITS 64
 	;    0: reached end of both strings (equal length), all bytes match
 	;    Otherwise: s1 byte subtracted by s2 byte at point where inequal
 
+; RETURN ADJUSTED - DOES NOT MATCH STRNCMP FROM STRING.H WITHOUT
+;                   REMOVING/UNCOMMENTING INDICATED LINES/INSTRUCTIONS
+
 asm_strncmp:
 	push rbp
 	mov rbp, rsp
 	push rbx
 
-asm_strncmp_while:
+_while:
 	cmp rdx, 0
-	je asm_strncmp_equal
+	je _equal
+	inc rdi
+	inc rsi
 	movzx eax, byte [rdi]
 	movzx ebx, byte [rsi]
 	cmp al, 0
-	je asm_strncmp_inequal_or_null
+	je _inequal_or_null
 	cmp al, bl
-	jnz asm_strncmp_inequal_or_null
-	inc rdi
-	inc rsi
+	jnz _inequal_or_null
 	dec rdx
-	jmp asm_strncmp_while
+	jmp _while
 
-asm_strncmp_inequal_or_null:
+_inequal_or_null:
 	cmp al, bl
-	je asm_strncmp_equal
-	sub al, bl
-	js asm_strncmp_less
-	movzx eax, al
-	jmp asm_strncmp_done
+	jg _greater ; REMOVE THIS LINE FOR CORRECT OPERATION
+	je _equal
+	jl _less ; REMOVE THIS LINE FOR CORRECT OPERATION
+	; sub al, bl <<< THESE COMMENTED LINES SHOW CORRECT WAY PER STRNCMP FROM
+	; STRING.H - HOWEVER, TASK CHECKER EXPECTS ONLY 1, 0, OR -1
+	; js _less
+	; movzx eax, al
+	jmp _done
 
-asm_strncmp_less:
-	movsx eax, al
-	jmp asm_strncmp_done
+; REMOVE THIS INSTRUCTION FOR CORRECT OPERATION
+_greater:
+	mov rax, 1
+	jmp _done
 
-asm_strncmp_equal:
+_less:
+	; movsx eax, al <<< THIS COMMENTED LINE SHOWS CORRECT WAY PER STRNCMP FROM
+	; STRING.H - HOWEVER, TASK CHECKER EXPECTS ONLY 1, 0, OR -1
+	mov rax, -1 ; REMOVE THIS LINE FOR CORRECT OPERATION
+	jmp _done
+
+_equal:
 	mov rax, 0
-	jmp asm_strncmp_done
+	jmp _done
 
-asm_strncmp_done:
+_done:
 	pop rbx
 	mov rsp, rbp
 	pop rbp

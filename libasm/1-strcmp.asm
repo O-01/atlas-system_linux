@@ -19,36 +19,36 @@ asm_strcmp:
 	mov rbp, rsp
 	push rbx
 
-asm_strcmp_while:
+_while:
 	movzx eax, byte [rdi]
 	movzx ebx, byte [rsi]
 	inc rdi
 	inc rsi
 	cmp al, 0
-	je asm_strcmp_inequal_or_null
+	je _inequal_or_null
 	cmp al, bl
-	jnz asm_strcmp_inequal_or_null
-	jmp asm_strcmp_while
+	jnz _inequal_or_null
+	jmp _while
 
-asm_strcmp_inequal_or_null:
+_inequal_or_null:
 	cmp al, bl
-	jg asm_strcmp_greater
-	jl asm_strcmp_less
-	je asm_strcmp_equal
+	jg _greater
+	jl _less
+	je _equal
 
-asm_strcmp_greater:
+_greater:
 	mov rax, 1
-	jmp asm_strcmp_done
+	jmp _done
 
-asm_strcmp_less:
+_less:
 	mov rax, -1
-	jmp asm_strcmp_done
+	jmp _done
 
-asm_strcmp_equal:
+_equal:
 	mov rax, 0
-	jmp asm_strcmp_done
+	jmp _done
 
-asm_strcmp_done:
+_done:
 	pop rbx
 	mov rsp, rbp
 	pop rbp
