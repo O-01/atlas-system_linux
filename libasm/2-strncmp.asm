@@ -23,17 +23,16 @@ asm_strncmp:
 	push rbx
 
 _while:
-	cmp rdx, 0
-	je _equal
-	inc rdi
-	inc rsi
 	movzx eax, byte [rdi]
 	movzx ebx, byte [rsi]
 	cmp al, 0
 	je _inequal_or_null
 	cmp al, bl
 	jnz _inequal_or_null
+	inc rdi
+	inc rsi
 	dec rdx
+	jz _equal
 	jmp _while
 
 _inequal_or_null:
