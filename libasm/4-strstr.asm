@@ -33,7 +33,7 @@ _while_candidate:
 	cmp al, 0
 	je _inequal_or_null
 	cmp bl, 0
-	je _while_found
+	je _found
 	cmp bl, al
 	jne _almost
 	inc rcx
