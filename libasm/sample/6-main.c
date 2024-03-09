@@ -12,11 +12,6 @@
  */
 int main(void)
 {
-    asm_putc('H');
-    asm_putc('b');
-    asm_putc('t');
-    asm_putc('n');
-    asm_putc('\n');
     assert(asm_putc('H') == 1);
     assert(asm_putc('b') == 1);
     assert(asm_putc('t') == 1);
