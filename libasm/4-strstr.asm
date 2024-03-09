@@ -15,44 +15,48 @@ asm_strstr:
 	mov rbp, rsp
 	push rbx
 	push rcx
-	mov rcx, rsi
-	movzx ebx, byte [rcx]
+	push rdx
+
+_keep_going:
+	movzx ebx, byte [rsi]
 
 _while:
 	movzx eax, byte [rdi]
 	cmp al, 0
 	je _inequal_or_null
 	cmp al, bl
-	je _while_candidate
+	je _candidate
 	inc rdi
 	jmp _while
 
-_while_candidate:
-	movzx eax, byte [rdi]
-	movzx ebx, byte [rcx]
-	cmp al, 0
-	je _inequal_or_null
-	cmp bl, 0
-	je _found
-	cmp bl, al
-	jne _almost
-	inc rcx
+_candidate:
+	mov rcx, rsi
+	mov rbx, rdi
 	jmp _while_candidate
 
-_almost:
-	mov rcx, rsi
-	movzx ebx, byte [rcx]
-	jmp _while
+_while_candidate:
+	movzx eax, byte [rdi]
+	movzx edx, byte [rcx]
+	cmp dl, 0
+	je _found
+	cmp al, 0
+	je _inequal_or_null
+	cmp dl, al
+	jne _keep_going
+	inc rcx
+	inc rdi
+	jmp _while_candidate
 
 _found:
-	mov rax, rdi
+	mov rax, rbx
 	jmp _done
 
 _inequal_or_null:
-	mov rax, 0
+	xor rax, rax
 	jmp _done
 
 _done:
+	pop rdx
 	pop rcx
 	pop rbx
 	mov rsp, rbp

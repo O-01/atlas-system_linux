@@ -16,6 +16,9 @@
  */
 int main(void)
 {
+    printf("std: %p - asm: %p\n", strstr(S1, S2), asm_strstr(S1, S2));
+    printf("std: %p - asm: %p\n", strstr(S1, S3), asm_strstr(S1, S3));
+    printf("std: %p - asm: %p\n", strstr(S1, S1), asm_strstr(S1, S1));
     assert(strstr(S1, S2) == asm_strstr(S1, S2));
     assert(strstr(S1, S3) == asm_strstr(S1, S3));
     assert(strstr(S1, S1) == asm_strstr(S1, S1));

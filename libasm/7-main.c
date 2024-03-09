@@ -12,6 +12,9 @@
  */
 int main(void)
 {
+    asm_puts("H");
+    asm_puts("olberton");
+    asm_puts(" School\n");
     assert(asm_puts("H") == 1);
     assert(asm_puts("olberton") == 8);
     assert(asm_puts(" School\n") == 8);

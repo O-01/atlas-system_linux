@@ -17,6 +17,10 @@
  */
 int main(void)
 {
+    printf("std: %d - asm: %d\n", strcasecmp(S1, S1), asm_strcasecmp(S1, S1));
+    printf("std: %d - asm: %d\n", strcasecmp(S1, S2), asm_strcasecmp(S1, S2));
+    printf("std: %d - asm: %d\n", strcasecmp(S1, S3), asm_strcasecmp(S1, S3));
+    printf("std: %d - asm: %d\n", strcasecmp(S1, S4), asm_strcasecmp(S1, S4));
     assert(strcasecmp(S1, S1) == asm_strcasecmp(S1, S1));
     assert(strcasecmp(S1, S2) == asm_strcasecmp(S1, S2));
     assert(strcasecmp(S1, S3) == asm_strcasecmp(S1, S3));
