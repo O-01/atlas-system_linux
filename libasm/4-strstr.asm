@@ -16,6 +16,10 @@ asm_strstr:
 	push rbx
 	push rcx
 	push rdx
+	movzx ebx, byte [rsi]
+	cmp bl, 0
+	je _null_rsi
+	jmp _while
 
 _keep_going:
 	movzx ebx, byte [rsi]
@@ -54,6 +58,9 @@ _found:
 _inequal_or_null:
 	xor rax, rax
 	jmp _done
+
+_null_rsi:
+	mov rax, rdi
 
 _done:
 	pop rdx
