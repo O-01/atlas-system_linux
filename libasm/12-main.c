@@ -20,6 +20,11 @@
  */
 int main(void)
 {
+    printf("std: %p | asm: %p\n", strpbrk(S2, A1), asm_strpbrk(S2, A1));
+    printf("std: %p | asm: %p\n", strpbrk(S2, A2), asm_strpbrk(S2, A2));
+    printf("std: %p | asm: %p\n", strpbrk(S3, A1), asm_strpbrk(S3, A1));
+    printf("std: %p | asm: %p\n", strpbrk(S3, A2), asm_strpbrk(S3, A2));
+    printf("std: %p | asm: %p\n", strpbrk(S1, A3), asm_strpbrk(S1, A3));
     assert(strpbrk(S2, A1) == asm_strpbrk(S2, A1));
     assert(strpbrk(S2, A2) == asm_strpbrk(S2, A2));
     assert(strpbrk(S3, A1) == asm_strpbrk(S3, A1));

@@ -19,6 +19,13 @@
  */
 int main(void)
 {
+    printf("std: %ld | asm: %ld\n", strspn(S2, A1), asm_strspn(S2, A1));
+    printf("std: %ld | asm: %ld\n", strspn(S2, A2), asm_strspn(S2, A2));
+    printf("std: %ld | asm: %ld\n", strspn(S3, A1), asm_strspn(S3, A1));
+    printf("std: %ld | asm: %ld\n", strspn(S3, A2), asm_strspn(S3, A2));
+    printf("std: %ld | asm: %ld\n", strspn(S1, A1), asm_strspn(S1, A1));
+    printf("std: %ld | asm: %ld\n", strspn(S1, A2), asm_strspn(S1, A2));
+    printf("std: %ld | asm: %ld\n", strspn(S1, A1 A2), asm_strspn(S1, A1 A2));
     assert(strspn(S2, A1) == asm_strspn(S2, A1));
     assert(strspn(S2, A2) == asm_strspn(S2, A2));
     assert(strspn(S3, A1) == asm_strspn(S3, A1));
