@@ -13,6 +13,8 @@ BITS 64
 	;     0: reached end of both strings (equal length), all bytes match
 	;     Otherwise: s1 byte subtracted by s2 byte where inequal (not 0)
 
+	; OUTPUT ADJUSTED PER PROJECT REQUIREMENTS - NOT NORMAL OUTPUT
+
 asm_strcasecmp:
 	push rbp
 	mov rbp, rsp
@@ -21,42 +23,35 @@ asm_strcasecmp:
 _while:
 	movzx eax, byte [rdi]
 	movzx ebx, byte [rsi]
-	jmp _compare
+	cmp al, 0
+	jne _al_case
+	cmp bl, 0
+	jne _bl_case
+	jmp _done
 
 _continue:
 	inc rdi
 	inc rsi
 	jmp _while
 
+_al_case:
+	cmp al, 65
+	jl _bl_case
+	cmp al, 90
+	jg _bl_case
+	add ax, 32
+
+_bl_case:
+	cmp bl, 65
+	jl _compare
+	cmp bl, 90
+	jg _compare
+	add bx, 32
+
 _compare:
-	cmp al, 0
-	je _done
-	cmp bl, 0
-	je _done
 	cmp al, bl
 	je _continue
-
-_possible_nonmatch:
-	cmp al, 65
-	jge _case
-	cmp bl, 65
-	jge _case
 	jmp _done
-
-_case:
-	cmp al, 90
-	jle _convert_al
-	cmp bl, 90
-	jle _convert_bl
-	jmp _done
-
-_convert_al:
-	add al, 32
-	jmp _compare
-
-_convert_bl:
-	add bl, 32
-	jmp _compare
 
 _done:
 	sub rax, rbx
