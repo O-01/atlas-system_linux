@@ -24,7 +24,7 @@ asm_strcspn:
 _while:
 	movzx ebx, byte [rdi]
 	cmp bl, 0
-	jne _verify_accept
+	jne _verify_reject
 	jmp _done
 
 _continue:
@@ -33,14 +33,14 @@ _continue:
 	mov rcx, 0
 	jmp _while
 
-_verify_accept:
+_verify_reject:
 	movzx edx, byte [rsi + rcx]
 	cmp dl, 0
 	je _continue
 	cmp bl, dl
 	je _done
 	inc rcx
-	jmp _verify_accept
+	jmp _verify_reject
 
 _done:
 	pop rdx
