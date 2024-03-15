@@ -8,7 +8,8 @@ void (*current_handler_signal(void))(int)
 {
 	__sighandler_t current_handler = signal(SIGINT, NULL);
 
-	return (current_handler == SIG_ERR
-			? NULL
-			: signal(SIGINT, current_handler));
+	if (current_handler == SIG_ERR)
+		return (NULL);
+	signal(SIGINT, current_handler);
+	return (current_handler);
 }
