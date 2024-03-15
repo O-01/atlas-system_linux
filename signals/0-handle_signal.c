@@ -8,11 +8,7 @@ static void interrupt_handler(int sig);
 */
 int handle_signal(void)
 {
-	__sighandler_t output = signal(SIGINT, interrupt_handler);
-
-	if (output == SIG_ERR)
-		return (-1);
-	return (0);
+	return (signal(SIGINT, interrupt_handler) == SIG_ERR ? -1 : 0);
 }
 
 /**
