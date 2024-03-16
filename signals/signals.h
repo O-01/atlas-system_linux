@@ -3,7 +3,6 @@
 
 #define _XOPEN_SOURCE 700
 
-#include <features.h>
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,5 +14,6 @@ typedef struct sigaction sigact_t;
 int handle_signal(void);
 void (*current_handler_signal(void))(int);
 int handle_sigaction(void);
+void (*current_handler_sigaction(void))(int);
 
 #endif
