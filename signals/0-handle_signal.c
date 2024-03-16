@@ -15,12 +15,8 @@ int handle_signal(void)
  * interrupt_handler - defines behavior upon receiving SIGINT
  * @interrupt_sig: incoming signal, expected to be SIGINT
 */
-static void interrupt_handler(int interrupt_sig)
+static void interrupt_handler(__attribute__((unused)) int interrupt_sig)
 {
-	char interrupt_sig_char = interrupt_sig + '0'; /* should be 2 */
-
 	/* s/n/printf is no-no - unsafe because non-reentrant */
-	write(1, "Gotcha! [", 9);
-	write(1, &interrupt_sig_char, 1);
-	write(1, "]\n", 2);
+	write(1, "Gotcha! [2]\n", 12);
 }

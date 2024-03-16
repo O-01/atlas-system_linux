@@ -1,8 +1,6 @@
 #ifndef _SIGNALS_H_
 #define _SIGNALS_H_
 
-#define _XOPEN_SOURCE 700
-
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
