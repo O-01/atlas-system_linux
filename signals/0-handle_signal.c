@@ -18,12 +18,9 @@ int handle_signal(void)
 static void interrupt_handler(int interrupt_sig)
 {
 	char interrupt_sig_char = interrupt_sig + '0'; /* should be 2 */
-	/* definition/initialization would be within if-statement in C99+ */
-	if (interrupt_sig == SIGINT)
-	{
-		/* s/n/printf is no-no - unsafe because non-reentrant */
-		write(1, "Gotcha! [", 9);
-		write(1, &interrupt_sig_char, 1);
-		write(1, "]\n", 2);
-	}
+
+	/* s/n/printf is no-no - unsafe because non-reentrant */
+	write(1, "Gotcha! [", 9);
+	write(1, &interrupt_sig_char, 1);
+	write(1, "]\n", 2);
 }
