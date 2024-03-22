@@ -1,11 +1,11 @@
 all: hnm hobjdump
 
 hnm:
-	@echo -e '#!/bin/bash\n' > $@
+	@echo '#!/bin/bash' > $@
 	@echo 'nm -p $$1' >> $@
 	chmod u+x -v $@
 
 hobjdump:
-	@echo -e '#!/bin/bash\n' > $@
+	@echo '#!/bin/bash' > $@
 	@echo 'objdump -sf $$1' >> $@
 	chmod u+x -v $@
