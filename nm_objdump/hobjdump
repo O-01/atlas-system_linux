@@ -1,3 +1,2 @@
 #!/bin/bash
-
 objdump -sf $1
