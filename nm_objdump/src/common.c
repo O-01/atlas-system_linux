@@ -1,4 +1,4 @@
-#include "hnm.h"
+#include "hnm_hobjdump.h"
 
 static uint16_t bswap16(uint16_t num);
 static uint32_t bswap32(uint32_t num);

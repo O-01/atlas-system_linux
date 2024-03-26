@@ -2,10 +2,13 @@ all: hnm hobjdump
 
 hnm:
 	@echo '#!/bin/bash' > $@
-	@echo 'nm -p $$1' >> $@
+	@echo '( exec -a "./hnm" nm -p $$1 )' >> $@
 	chmod u+x -v $@
 
 hobjdump:
 	@echo '#!/bin/bash' > $@
-	@echo 'objdump -sf $$1' >> $@
+	@echo '( exec -a "./hobjdump" objdump -sf $$1 )' >> $@
 	chmod u+x -v $@
+
+clean:
+	rm -f hnm hobjdump

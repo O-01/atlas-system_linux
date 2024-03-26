@@ -1,2 +1,2 @@
 #!/bin/bash
-objdump -sf $1
+( exec -a "./hobjdump" objdump -sf $1 )

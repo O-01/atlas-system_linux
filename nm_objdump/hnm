@@ -1,2 +1,2 @@
 #!/bin/bash
-nm -p $1
+( exec -a "./hnm" nm -p $1 )

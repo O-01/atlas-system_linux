@@ -1,4 +1,4 @@
-#include "hnm.h"
+#include "hnm_hobjdump.h"
 
 static void classer(unsigned char clas);
 static void endianer(unsigned char dat);
