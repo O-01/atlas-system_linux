@@ -183,6 +183,44 @@ void convert_ph_endian_64(Elf64_Phdr *ph_64, uint16_t phnum)
 }
 
 /**
+ * convert_sym_endian_32 - converts 32-bit ELF symbol table from little endian
+ *                         to big endian or vice-versa
+ * @sym_32: Elf32_Sym symbol table entry struct for 32-bit input file
+ * @size: size of section header containing symbol table
+*/
+void convert_sym_endian_32(Elf32_Sym *sym_32, size_t size)
+{
+	uint16_t iter = 0;
+
+	for (; iter != size; iter++)
+	{
+		sym_32[iter].st_name = bswap32(sym_32[iter].st_name);
+		sym_32[iter].st_value = bswap32(sym_32[iter].st_value);
+		sym_32[iter].st_size = bswap32(sym_32[iter].st_size);
+		sym_32[iter].st_shndx = bswap16(sym_32[iter].st_shndx);
+	}
+}
+
+/**
+ * convert_sym_endian_64 - converts 64-bit ELF symbol table from little endian
+ *                         to big endian or vice-versa
+ * @sym_64: Elf64_Sym symbol table entry struct for 64-bit input file
+ * @size: size of section header containing symbol table
+*/
+void convert_sym_endian_64(Elf64_Sym *sym_64, size_t size)
+{
+	uint16_t iter = 0;
+
+	for (; iter != size; iter++)
+	{
+		sym_64[iter].st_name = bswap32(sym_64[iter].st_name);
+		sym_64[iter].st_value = bswap64(sym_64[iter].st_value);
+		sym_64[iter].st_size = bswap64(sym_64[iter].st_size);
+		sym_64[iter].st_shndx = bswap16(sym_64[iter].st_shndx);
+	}
+}
+
+/**
  * bswap16 - converts endianness of unsigned 16-bit integer
  * @num: number to be converted
  * Return: converted number
