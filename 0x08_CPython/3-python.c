@@ -77,6 +77,7 @@ void print_python_bytes(PyObject *p)
 void print_python_float(PyObject *p)
 {
 	PyFloatObject *float_cast = NULL;
+	char *float_str = NULL;
 
 	printf("[.] float object info\n");
 	if (!p || !PyFloat_Check(p))
@@ -85,8 +86,15 @@ void print_python_float(PyObject *p)
 		return;
 	}
 	float_cast = (PyFloatObject *)p;
-	printf(
-		"  value: %s\n",
-		PyOS_double_to_string(
-			float_cast->ob_fval, 'g', 16, Py_DTSF_ADD_DOT_0, NULL));
+	/**
+	 * Correct arguments to PyOS_double_to_string in 3.11+ for desired output:
+	 * float_cast->ob_fval, 'g', 16, Py_DTSF_ADD_DOT_0, NULL
+	*/
+	float_str = PyOS_double_to_string(float_cast->ob_fval, 'g', 16, 0, NULL);
+	/**
+	 * Print statement in 3.11+ assuming correct arguments used above:
+	 * printf("  value %s\n", float_str);
+	*/
+	printf("  value: %s%s\n", float_str, strchr(float_str, '.') ? "" : ".0");
+
 }

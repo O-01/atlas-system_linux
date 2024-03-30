@@ -42,3 +42,5 @@ print(listo)
 lib.print_python_list(listo)
 lib.print_python_float(listo)
 lib.print_python_list(f)
+f = 9492307816406286.0
+lib.print_python_float(f)
