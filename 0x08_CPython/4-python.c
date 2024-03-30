@@ -22,5 +22,6 @@ void print_python_string(PyObject *p)
 		"  value: %ls\n",
 		unicode_cast->state.ascii ? "ascii" : "unicode object",
 		unicode_cast->length,
-		_PyUnicode_AsUnicode(p));
+		/* Below is deprecated: _PyUnicode_AsUnicode(p) works in Python 3.12 */
+		PyUnicode_AsUnicode(p));
 }
