@@ -64,7 +64,7 @@ void print_python_bytes(PyObject *p)
 		"  trying string: %s\n"
 		"  first %ld bytes:",
 		bytes_size,
-		PyBytes_AsString(p),
+		bytes_cast->ob_sval,
 		bytes_len_null_10);
 	for (iter = 0; iter < bytes_len_null_10; ++iter)
 		printf(" %02x", bytes_cast->ob_sval[iter] & 0xff);
@@ -78,7 +78,7 @@ void print_python_bytes(PyObject *p)
 void print_python_float(PyObject *p)
 {
 	PyFloatObject *float_cast = NULL;
-	
+
 	printf("[.] float object info\n");
 	if (!p || !PyFloat_Check(p))
 	{
@@ -86,5 +86,8 @@ void print_python_float(PyObject *p)
 		return;
 	}
 	float_cast = (PyFloatObject *)p;
-	printf("  value: %f\n", float_cast->ob_fval);
+	printf(
+		"  value: %s\n",
+		PyOS_double_to_string(
+			float_cast->ob_fval, 'g', 16, Py_DTSF_ADD_DOT_0, NULL));
 }
