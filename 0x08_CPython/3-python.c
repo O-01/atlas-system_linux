@@ -16,6 +16,7 @@ void print_python_list(PyObject *p)
 	Py_ssize_t list_len = 0, i = 0;
 	const char *type_name = NULL;
 
+	printf("[*] Python list info\n");
 	if (!p || !PyList_Check(p))
 	{
 		printf("  [ERROR] Invalid List Object\n");
@@ -24,7 +25,6 @@ void print_python_list(PyObject *p)
 	list_len = PyObject_Length(p);
 	list_ptr = (PyListObject *)p;
 	printf(
-		"[*] Python list info\n"
 		"[*] Size of the Python List = %ld\n"
 		"[*] Allocated = %ld\n",
 		list_len, list_ptr->allocated);
@@ -59,7 +59,6 @@ void print_python_bytes(PyObject *p)
 	bytes_size = PyBytes_Size(p);
 	bytes_len_null_10 = bytes_size + 1 > 10 ? 10 : bytes_size + 1;
 	printf(
-		"[.] bytes object info\n"
 		"  size: %ld\n"
 		"  trying string: %s\n"
 		"  first %ld bytes:",
