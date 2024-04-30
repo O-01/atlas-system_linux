@@ -36,8 +36,9 @@ int main(__attribute__((unused)) int argc, char **argv, char **envp)
 				fprintf(stderr, "%s%s", SYSCALLNAME(regs),
 					SYSCALLNO(regs) == 1 ? "" : "\n");
 			ptrace(PTRACE_SYSCALL, pid, NULL, NULL);
-			if (SYSCALLNO(regs) == 1)
-				putchar('\n'); /* print ugly output upon write, per project */
+			/* print ugly output upon write, per project */
+			if (SYSCALLNO(regs) == 1 && ALT)
+				fprintf(stderr, "\n");
 			alt++;
 		}
 	}
