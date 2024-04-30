@@ -30,7 +30,8 @@ int main(__attribute__((unused)) int argc, char **argv, char **envp)
 			if (WIFEXITED(status))
 				break;
 			if (!ptrace(PTRACE_GETREGS, pid, NULL, &regs) && (!alt || alt & 1))
-				fprintf(stderr, "%lu\n", (size_t)regs.orig_rax);
+				fprintf(stderr, "%lu : ", (size_t)regs.orig_rax),
+				fprintf(stderr, "%s\n", SYSCALL_NAME(regs));
 			ptrace(PTRACE_SYSCALL, pid, NULL, NULL);
 			alt++;
 		}

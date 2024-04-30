@@ -13,9 +13,11 @@ $(BUILDDIR)/%.o : $(SRCDIR)/%.c
 	@mkdir -p $(BUILDDIR)
 	$(CC) $(CFLAGS) -c -I$(INCDIR) $< -o $@
 
-strace_0: $(OBJ)
+strace_0: $(BUILDDIR)/strace_0.o
 	$(CC) $(CFLAGS) $^ -o $@
-	$(CC) $(CFLAGS) $^ -g -o $@_debug
+
+strace_1: $(BUILDDIR)/strace_1.o
+	$(CC) $(CFLAGS) $^ -o $@
 
 clean:
 	@$(RM) -rf build
