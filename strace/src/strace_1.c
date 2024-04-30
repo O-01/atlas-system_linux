@@ -35,10 +35,10 @@ int main(__attribute__((unused)) int argc, char **argv, char **envp)
 				/* fprintf(stderr, "%lu : ", (size_t)regs.orig_rax), */
 				fprintf(stderr, "%s%s", SYSCALLNAME(regs),
 					SYSCALLNO(regs) == 1 ? "" : "\n");
-			ptrace(PTRACE_SYSCALL, pid, NULL, NULL);
 			/* print ugly output upon write, per project */
-			if (SYSCALLNO(regs) == 1 && ALT)
+			if (SYSCALLNO(regs) == 1 && !ALT)
 				fprintf(stderr, "\n");
+			ptrace(PTRACE_SYSCALL, pid, NULL, NULL);
 			alt++;
 		}
 	}
