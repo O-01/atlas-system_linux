@@ -33,13 +33,14 @@ int main(__attribute__((unused)) int argc, char **argv, char **envp)
 			if (!ptrace(PTRACE_GETREGS, pid, NULL, &regs) &&
 				ALT && SUPPORTED(regs))
 				/* fprintf(stderr, "%lu : ", (size_t)regs.orig_rax), */
-				fprintf(stderr, "%s%s", SYSCALLNAME(regs),
+				printf("%s%s", SYSCALLNAME(regs),
 					SYSCALLNO(regs) == 1 ? "" : "\n");
 			/* print ugly output upon write, per project */
 			if (SYSCALLNO(regs) == 1 && !ALT)
-				fprintf(stderr, "\n");
+				printf("\n");
 			ptrace(PTRACE_SYSCALL, pid, NULL, NULL);
 			alt++;
+			fflush(stdout);
 		}
 	}
 	return (0);
