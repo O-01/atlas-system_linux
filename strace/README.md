@@ -39,6 +39,7 @@ This project requires you to parse the files `/usr/include/asm/unistd_64.h` and 
 Since this is a very time-consuming task, you are given a [header file](https://github.com/hs-hq/0x0B-strace.c), containing all these informations, allowing you to focus on the `ptrace` part of this project.
 
 Please note that you are completely allowed to use your own data structure(s) and/or to modify the one provided to you, which is only here to help you getting started with `strace`, it does not contain everything you need for a complete `strace`.
+#
 #### 0. Step #0 - Syscall number
 Write a program that executes and traces a given command.
 - Usage: `./strace_0 command [args...]`
@@ -94,6 +95,7 @@ alex@~/strace$
 - GitHub repository: `atlas-system_linux`
 - Directory: `strace`
 - File: `Makefile`
+#
 #### 1. Step #1 - Syscall name
 Write a program that executes and traces a given command.
 - Usage: `./strace_1 command [args...]`
@@ -149,6 +151,7 @@ alex@~/strace$
 - GitHub repository: `atlas-system_linux`
 - Directory: `strace`
 - File: `Makefile`
+#
 #### 2. Step #2 - Return value
 Write a program that executes and traces a given command.
 - Usage: `./strace_2 command [args...]`
@@ -205,6 +208,7 @@ alex@~/strace$
 - GitHub repository: `atlas-system_linux`
 - Directory: `strace`
 - File: `Makefile`
+#
 #### 3. Step #3 - Raw parameters
 Write a program that executes and traces a given command.
 - Usage: `./strace_3 command [args...]`
@@ -265,6 +269,8 @@ alex@~/strace$
 - GitHub repository: `atlas-system_linux`
 - Directory: `strace`
 - File: `Makefile`
+#
+## Advanced tasks
 #### 4. Step #4 - Strings
 Write a program that executes and traces a given command.
 - Usage: `./strace_4 command [args...]`
@@ -321,6 +327,7 @@ alex@~/strace$
 - GitHub repository: `atlas-system_linux`
 - Directory: `strace`
 - File: `Makefile`
+#
 #### 5. Step #5 - Integers
 Write a program that executes and traces a given command.
 - Usage: `./strace_5 command [args...]`
@@ -385,6 +392,7 @@ alex@~/strace$
 - GitHub repository: `atlas-system_linux`
 - Directory: `strace`
 - File: `Makefile`
+#
 #### 6. Step #6 - Macros
 Write a program that executes and traces a given command.
 - Usage: `./strace_6 command [args...]`
@@ -441,6 +449,7 @@ alex@~/strace$
 - GitHub repository: `atlas-system_linux`
 - Directory: `strace`
 - File: `Makefile`
+#
 #### 7. Step #7 - Buffer
 Write a program that executes and traces a given command.
 - Usage: `./strace_7 command [args...]`
@@ -497,6 +506,7 @@ alex@~/strace$
 - GitHub repository: `atlas-system_linux`
 - Directory: `strace`
 - File: `Makefile`
+#
 #### 8. Step #8 - Structure
 Write a program that executes and traces a given command.
 - Usage: `./strace_8 command [args...]`
@@ -552,3 +562,4 @@ alex@~/strace$
 - GitHub repository: `atlas-system_linux`
 - Directory: `strace`
 - File: `Makefile`
+#
