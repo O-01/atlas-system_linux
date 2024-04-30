@@ -11,7 +11,10 @@
 
 #include "syscalls.h"
 
-#define SYSCALL_NAME(x) syscalls_64_g[(x).orig_rax].name
+#define ALT (!alt || (alt & 1))
+#define SYSCALLNAME(x) syscalls_64_g[(x).orig_rax].name
+#define SYSCALLNO(x) (x).orig_rax
+#define SUPPORTED(x) (SYSCALLNO(x) < 318)
 
 typedef struct user_regs_struct user_regs;
 
