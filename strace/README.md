@@ -5,8 +5,8 @@ For this project, we expect you to look at these concepts:
 - [[EYNTK] Strace](https://intranet.atlasschool.com/concepts/931)
 ### Resources
 #### Read or watch:
-- [Ptrace Tutorial]()
-- [How does ptrace work]()
+- [Ptrace Tutorial](https://webdocs.cs.ualberta.ca/~paullu/C498/meng.ptrace.slides.pdf)
+- [How does ptrace work](https://stackoverflow.com/questions/23928530/how-does-ptrace-work-in-linux/23929059#23929059)
 #### man or help:
 - `strace`
 - `ptrace`
