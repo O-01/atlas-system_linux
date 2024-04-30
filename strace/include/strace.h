@@ -9,8 +9,6 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-#define forever while(1)
-
 typedef struct user_regs_struct user_regs;
 
 #endif

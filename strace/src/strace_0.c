@@ -1,5 +1,12 @@
 #include "strace.h"
 
+/**
+ * main - entry point
+ * @argc: count of arguments passed to program upon launch
+ * @argv: argument vector
+ * @envp: environmental variable vector
+ * Return: 0 upon success
+*/
 int main(__attribute__((unused)) int argc, char **argv, char **envp)
 {
 	pid_t pid;
@@ -18,14 +25,14 @@ int main(__attribute__((unused)) int argc, char **argv, char **envp)
 	}
 	else
 	{
-		forever
+		while (1)
 		{
 			wait(&status);
 			if (WIFEXITED(status))
 				break;
 			/* call_no = ptrace(PTRACE_PEEKUSER, pid, 8 * ORIG_RAX, NULL); */
 			if (!ptrace(PTRACE_GETREGS, pid, NULL, &regs) && (!alt || alt & 1))
-				fprintf(stderr, "%llu\n", regs.orig_rax);
+				fprintf(stderr, "%lu\n", (size_t)regs.orig_rax);
 			ptrace(PTRACE_SYSCALL, pid, NULL, NULL);
 			alt++;
 		}
