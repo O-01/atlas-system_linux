@@ -81,10 +81,10 @@ static void print_param(user_regs *regs, size_t param)
 			printf("%s%lx", HEX_PREFIX(regs->r10), (size_t)regs->r10);
 		break;
 		case 4:
-			printf("%s%lx", HEX_PREFIX(regs->r9), (size_t)regs->r9);
+			printf("%s%lx", HEX_PREFIX(regs->r8), (size_t)regs->r8);
 		break;
 		case 5:
-			printf("%s%lx", HEX_PREFIX(regs->r8), (size_t)regs->r8);
+			printf("%s%lx", HEX_PREFIX(regs->r9), (size_t)regs->r9);
 		break;
 		default:
 		break;
