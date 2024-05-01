@@ -34,7 +34,7 @@ int main(__attribute__((unused)) int argc, char **argv, char **envp)
 				break;
 			if (!GETREGS(regs) && ALT && SUPPORTED(regs))
 			{
-				printf("%s(", SYSCALLNAME(regs)),
+				printf("%s(", SYSCALLNAME(regs));
 				printed = 0;
 				for (param = 0; param < PARAM_COUNT(regs); param++)
 					if (SYSCALLPARAM(regs, param))
