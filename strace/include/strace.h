@@ -20,7 +20,7 @@
 #define SYSCALLNO(x) (x).orig_rax
 #define SUPPORTED(x) (SYSCALLNO(x) < 318)
 #define PARAM_COUNT(x) syscalls_64_g[(x).orig_rax].nb_params
-#define HEX_PREFIX(x) (!x ? "" : "0x")
+/* #define HEX_PREFIX(x) (!x ? "" : "0x") */
 #define SYSCALLPARAM(x, y) syscalls_64_g[(x).orig_rax].params[y]
 
 typedef struct user_regs_struct user_regs;

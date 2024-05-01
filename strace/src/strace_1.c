@@ -29,8 +29,7 @@ int main(__attribute__((unused)) int argc, char **argv, char **envp)
 			wait(&status);
 			if (WIFEXITED(status))
 				break;
-			if (!ptrace(PTRACE_GETREGS, pid, NULL, &regs) &&
-				ALT && SUPPORTED(regs))
+			if (!GETREGS(regs) && ALT && SUPPORTED(regs))
 				printf("%s%s", SYSCALLNAME(regs),
 					SYSCALLNO(regs) == 1 ? "" : "\n");
 			/* print ugly output upon write, per project */

@@ -34,7 +34,7 @@ int main(__attribute__((unused)) int argc, char **argv, char **envp)
 				printed = 0;
 			/* print ugly output upon write, per project */
 			if ((!alt || ((alt - 1) & 1)) && !printed)
-				printf(" = %s%lx\n", regs.rax ? "0x" : "", (size_t)regs.rax),
+				printf(" = %#lx\n", (size_t)regs.rax),
 				printed = 1;
 			ptrace(PTRACE_SYSCALL, pid, NULL, NULL);
 			alt++;

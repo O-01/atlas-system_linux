@@ -42,7 +42,7 @@ int main(__attribute__((unused)) int argc, char **argv, char **envp)
 			}
 			/* print ugly output upon write, per project */
 			if ((!alt || ((alt - 1) & 1)) && !printed)
-				printf(") = %s%lx\n", HEX_PREFIX(regs.rax), (size_t)regs.rax),
+				printf(") = %#lx\n", (size_t)regs.rax),
 				printed = 1;
 			ptrace(PTRACE_SYSCALL, pid, NULL, NULL);
 			alt++;
@@ -71,22 +71,22 @@ static void print_param(user_regs *regs, size_t param)
 	switch (param)
 	{
 		case 0:
-			printf("%s%lx", HEX_PREFIX(regs->rdi), (size_t)regs->rdi);
+			printf("%#lx", (size_t)regs->rdi);
 		break;
 		case 1:
-			printf("%s%lx", HEX_PREFIX(regs->rsi), (size_t)regs->rsi);
+			printf("%#lx", (size_t)regs->rsi);
 		break;
 		case 2:
-			printf("%s%lx", HEX_PREFIX(regs->rdx), (size_t)regs->rdx);
+			printf("%#lx", (size_t)regs->rdx);
 		break;
 		case 3:
-			printf("%s%lx", HEX_PREFIX(regs->r10), (size_t)regs->r10);
+			printf("%#lx", (size_t)regs->r10);
 		break;
 		case 4:
-			printf("%s%lx", HEX_PREFIX(regs->r8), (size_t)regs->r8);
+			printf("%#lx", (size_t)regs->r8);
 		break;
 		case 5:
-			printf("%s%lx", HEX_PREFIX(regs->r9), (size_t)regs->r9);
+			printf("%#lx", (size_t)regs->r9);
 		break;
 		default:
 		break;
