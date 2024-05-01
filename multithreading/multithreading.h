@@ -82,10 +82,10 @@ typedef void *(*task_entry_t)(void *);
  */
 typedef enum task_status_e
 {
-    PENDING = 0,
-    STARTED,
-    SUCCESS,
-    FAILURE
+	PENDING = 0,
+	STARTED,
+	SUCCESS,
+	FAILURE
 } task_status_t;
 
 /**
@@ -99,11 +99,11 @@ typedef enum task_status_e
  */
 typedef struct task_s
 {
-    task_entry_t    entry;
-    void        *param;
-    task_status_t   status;
-    void        *result;
-    pthread_mutex_t lock;
+	task_entry_t    entry;
+	void        *param;
+	task_status_t   status;
+	void        *result;
+	pthread_mutex_t lock;
 } task_t;
 
 void *thread_entry(void *arg);

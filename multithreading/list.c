@@ -15,7 +15,7 @@ node_t *node_create(void *content)
 
 	node->content = content;
 	node->prev = NULL;
-	node-> next = NULL;
+	node->next = NULL;
 	return (node);
 }
 
@@ -80,7 +80,7 @@ void list_destroy(list_t *list,  node_func_t free_func)
 
 /**
  * list_each - Iterates over a list and calls a function for each node
- *
+ * @list: Pointer to the list structure to process
  * @func: Pointer to a function to call with the content of each node
  */
 void list_each(list_t *list, node_func_t func)
