@@ -61,7 +61,9 @@ int main(__attribute__((unused)) int argc, char **argv, char **envp)
 */
 static void print_param(user_regs *regs, size_t param)
 {
-	if (SYSCALLPARAM(*regs, param) == VARARGS)
+	if (SYSCALLPARAM(*regs, param) == VOID)
+		return;
+	else if (SYSCALLPARAM(*regs, param) == VARARGS)
 	{
 		printf("...");
 		return;
