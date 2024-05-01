@@ -3,7 +3,7 @@
 /**
  * thread_entry - entry point to new thread
  * @arg: holds address of string to be printed
- * Return: 
+ * Return: exit thread with arg
 */
 void *thread_entry(void *arg)
 {
