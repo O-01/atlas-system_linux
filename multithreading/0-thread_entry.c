@@ -7,6 +7,8 @@
 */
 void *thread_entry(void *arg)
 {
+	if (!arg)
+		return (NULL);
 	printf("%s\n", (char *)arg);
 	pthread_exit(arg);
 }

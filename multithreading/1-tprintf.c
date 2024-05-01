@@ -7,5 +7,5 @@
 */
 int tprintf(char const *format, ...)
 {
-	return (printf("[%lu] %s", pthread_self(), format));
+	return (!format ? -1 : printf("[%lu] %s", pthread_self(), format));
 }
