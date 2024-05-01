@@ -1,5 +1,4 @@
 #include "strace.h"
-#include <asm/unistd_64.h>
 
 /**
  * main - entry point
@@ -32,7 +31,6 @@ int main(__attribute__((unused)) int argc, char **argv, char **envp)
 				break;
 			if (!ptrace(PTRACE_GETREGS, pid, NULL, &regs) &&
 				ALT && SUPPORTED(regs))
-				/* fprintf(stderr, "%lu : ", (size_t)regs.orig_rax), */
 				printf("%s%s", SYSCALLNAME(regs),
 					SYSCALLNO(regs) == 1 ? "" : "\n");
 			/* print ugly output upon write, per project */

@@ -8,9 +8,12 @@
 #include <sys/user.h>
 #include <sys/wait.h>
 #include <unistd.h>
+/* #include <asm/unistd_32.h> */
+/* #include <asm/unistd_64.h> */
 
 #include "syscalls.h"
 
+#define GETREGS(x) ptrace(PTRACE_GETREGS, pid, NULL, &(x))
 #define ALT (!alt || (alt & 1))
 #define SYSCALLNAME(x) syscalls_64_g[(x).orig_rax].name
 #define SYSCALLNO(x) (x).orig_rax

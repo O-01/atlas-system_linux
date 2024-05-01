@@ -19,6 +19,9 @@ strace_0: $(BUILDDIR)/strace_0.o
 strace_1: $(BUILDDIR)/strace_1.o
 	$(CC) $(CFLAGS) $^ -o $@
 
+strace_2: $(BUILDDIR)/strace_2.o
+	$(CC) $(CFLAGS) $^ -o $@
+
 clean:
 	@$(RM) -rf build
 	@$(RM) -f strace_*
