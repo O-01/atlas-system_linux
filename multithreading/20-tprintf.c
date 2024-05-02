@@ -1,5 +1,7 @@
 #include "multithreading.h"
 
+int tprintf(char const *format, ...);
+
 pthread_mutex_t mutex;
 
 /**
@@ -8,7 +10,7 @@ pthread_mutex_t mutex;
 void __attribute__((constructor)) initialize_mutex(void)
 {
 	if (pthread_mutex_init(&mutex, NULL))
-		exit(1);
+		write(2, "Mutex init failure\n", 19), exit(1);
 }
 
 /**
@@ -26,5 +28,16 @@ void __attribute__((destructor)) destroy_mutex(void)
 */
 int tprintf(char const *format, ...)
 {
-	return (!format ? -1 : printf("[%lu] %s", pthread_self(), format));
+	int printf_chars = 0, vprintf_chars = 0;
+	va_list varargs;
+
+	if (!format)
+		return (-1);
+	va_start(varargs, format);
+	pthread_mutex_lock(&mutex);
+	printf_chars = printf("[%lu] ", pthread_self());
+	vprintf_chars = vprintf(format, varargs);
+	pthread_mutex_unlock(&mutex);
+	va_end(varargs);
+	return (printf_chars + vprintf_chars);
 }
