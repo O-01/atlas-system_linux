@@ -22,7 +22,7 @@ list_t *prime_factors(char const *s)
 	for (; (s_lit - 1) & 1; s_lit >>= 1)
 		if (new_factor(&factor_list, 2) == -1)
 			return (NULL);
-	for (prime = 3; prime < sqrtul(s_lit); prime += 2)
+	for (prime = 3; prime <= sqrtul(s_lit); prime += 2)
 		for (; !(s_lit % prime); s_lit /= prime)
 			if (new_factor(&factor_list, prime) == -1)
 				return (NULL);
