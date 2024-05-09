@@ -7,14 +7,14 @@ task_t *create_task(task_entry_t entry, void *param);
 void destroy_task(task_t *task);
 void *exec_tasks(list_t const *tasks);
 
-static pthread_mutex_t mutex;
+static pthread_mutex_t task_mutex;
 
 /**
  * initialize_task_mutex - initialize mutual exception
 */
 void __attribute__((constructor)) initialize_task_mutex(void)
 {
-	if (pthread_mutex_init(&mutex, NULL))
+	if (pthread_mutex_init(&task_mutex, NULL))
 		write(2, "Mutex init failure\n", 19), exit(1);
 }
 
@@ -23,7 +23,7 @@ void __attribute__((constructor)) initialize_task_mutex(void)
 */
 void __attribute__((destructor)) destroy_task_mutex(void)
 {
-	pthread_mutex_destroy(&mutex);
+	pthread_mutex_destroy(&task_mutex);
 }
 
 /**
@@ -43,7 +43,7 @@ task_t *create_task(task_entry_t entry, void *param)
 	task->param = param;
 	task->status = PENDING;
 	task->result = NULL;
-	task->lock = mutex;
+	task->lock = task_mutex;
 	return (task);
 }
 
@@ -79,18 +79,18 @@ void *exec_tasks(list_t const *tasks)
 	for (tmp = tasks->head; tmp && id < tasks->size; tmp = tmp->next, ++id)
 	{
 		task = tmp->content;
-		pthread_mutex_lock(&task->lock);
+		pthread_mutex_lock(&task_mutex);
 		if (task->status == PENDING)
 		{
 			task->status = STARTED;
-			pthread_mutex_unlock(&task->lock);
+			pthread_mutex_unlock(&task_mutex);
 			tprintf("[%02lu] Started\n", id);
 			task->result = task->entry(task->param);
 			task->status = task->result ? SUCCESS : FAILURE;
 			tprintf("[%02lu] %s\n", id, task->result ? "Success" : "Failure");
 		}
 		else
-			pthread_mutex_unlock(&task->lock);
+			pthread_mutex_unlock(&task_mutex);
 	}
 	return (NULL);
 }
