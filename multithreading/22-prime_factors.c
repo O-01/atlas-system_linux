@@ -1,5 +1,31 @@
 #include "multithreading.h"
 
+void __attribute__((constructor)) initialize_task_mutex(void);
+void __attribute__((destructor)) destroy_task_mutex(void);
+
+task_t *create_task(task_entry_t entry, void *param);
+void destroy_task(task_t *task);
+void *exec_tasks(list_t const *tasks);
+
+static pthread_mutex_t mutex;
+
+/**
+ * initialize_task_mutex - initialize mutual exception
+*/
+void __attribute__((constructor)) initialize_task_mutex(void)
+{
+	if (pthread_mutex_init(&mutex, NULL))
+		write(2, "Mutex init failure\n", 19), exit(1);
+}
+
+/**
+ * destroy_task_mutex - destroy mutual exception
+*/
+void __attribute__((destructor)) destroy_task_mutex(void)
+{
+	pthread_mutex_destroy(&mutex);
+}
+
 /**
  * create_task - creates task node & populates relevant member variable values
  * @entry: pointer to task entry function
@@ -10,13 +36,14 @@ task_t *create_task(task_entry_t entry, void *param)
 {
 	task_t *task;
 
-	task = malloc(sizeof(task_t));
+	task = calloc(1, sizeof(task_t));
 	if (!task)
 		return (NULL);
 	task->entry = entry;
 	task->param = param;
-	task->status = 0;
-	pthread_mutex_init(&task->lock, NULL);
+	task->status = PENDING;
+	task->result = NULL;
+	task->lock = mutex;
 	return (task);
 }
 
@@ -26,6 +53,8 @@ task_t *create_task(task_entry_t entry, void *param)
 */
 void destroy_task(task_t *task)
 {
+	if (!task)
+		return;
 	if (task->result)
 	{
 		list_destroy((list_t *)task->result, free);
@@ -43,27 +72,25 @@ void *exec_tasks(list_t const *tasks)
 {
 	node_t *tmp = NULL;
 	task_t *task = NULL;
-	int task_id = 0;
+	size_t id = 0;
 
 	if (!tasks)
-		pthread_exit(NULL);
-	for (tmp = tasks->head, task_id = 0; tmp; tmp = tmp->next, ++task_id)
+		return (NULL);
+	for (tmp = tasks->head; tmp && id < tasks->size; tmp = tmp->next, ++id)
 	{
 		task = tmp->content;
-		if (!pthread_mutex_trylock(&task->lock))
-			continue;
-		if (!task->status)
+		pthread_mutex_lock(&task->lock);
+		if (task->status == PENDING)
 		{
 			task->status = STARTED;
+			pthread_mutex_unlock(&task->lock);
+			tprintf("[%02lu] Started\n", id);
 			task->result = task->entry(task->param);
-			tprintf("[%02d] Started\n", task_id);
-			if (!task->result)
-				task->status = FAILURE;
-			else
-				task->status = SUCCESS;
-			tprintf("[%02d] %s\n", task_id,
-				task->status == FAILURE ? "Failure" : "Success");
+			task->status = task->result ? SUCCESS : FAILURE;
+			tprintf("[%02lu] %s\n", id, task->result ? "Success" : "Failure");
 		}
+		else
+			pthread_mutex_unlock(&task->lock);
 	}
 	return (NULL);
 }
