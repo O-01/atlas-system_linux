@@ -20,7 +20,10 @@ int main(void)
 		perror("bind"), exit(EXIT_FAILURE);
 	if (listen(sock, 128) == -1)
 		perror("not listening"), exit(EXIT_FAILURE);
-	printf("%s:%d : LISTENING O_O\n", inet_ntoa(info.sin_addr), ntohs(info.sin_port));
+	printf(
+		"%s:%d : LISTENING O_O\n",
+		inet_ntoa(info.sin_addr), ntohs(info.sin_port)
+	);
 	for (;;)
 	{
 		in = accept(sock, (struct sockaddr *)&info, &size);
