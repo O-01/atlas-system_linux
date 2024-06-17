@@ -46,4 +46,5 @@ int main(int argc, char **argv)
 	}
 	freeaddrinfo(host_info);
 	printf("CONNECTED TO %s:%s (%s:%s) \\('-`)/\n", host, port, ip, port);
+	return (0);
 }
