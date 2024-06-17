@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #include <sys/socket.h>
@@ -12,12 +13,15 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
+#ifndef __USE_XOPEN2K
+#define __USE_XOPEN2K
+#endif
+
+#include <netdb.h>
 
 /* #include <stddef.h> */
-/* #include <string.h> */
 /* #include <sys/un.h> */
 /* #include <net/if.h> */
-/* #include <netdb.h> */
 
 
 #endif
