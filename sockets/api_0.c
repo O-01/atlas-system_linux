@@ -9,7 +9,8 @@ int main(void)
 	int sock, in;
 	socklen_t size = sizeof(struct sockaddr_in);
 	struct sockaddr_in info, peer_info;
-	char data_buf[4096], meth[32], path[PATH_MAX], vers[32];
+	char data_buf[4096], meth[32], path[4096], vers[32];
+	/* char *reply = "200 OK"; */
 	ssize_t recvd = 0;
 
 	sock = socket(PF_INET, SOCK_STREAM, 0);
@@ -37,6 +38,7 @@ int main(void)
 		printf("Raw request: \"%s\"\n", data_buf);
 		sscanf(data_buf, "%s %s %s", meth, path, vers);
 		printf("Method: %s\nPath: %s\nVersion: %s\n", meth, path, vers);
+		send(in, "HTTP/1.1 200 OK\r\n\r\n", 23, MSG_NOSIGNAL);
 		close(in);
 	}
 	return (EXIT_SUCCESS);

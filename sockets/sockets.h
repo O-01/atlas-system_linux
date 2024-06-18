@@ -6,8 +6,6 @@
 #include <string.h>
 #include <unistd.h>
 
-#include <linux/limits.h>
-
 #include <sys/socket.h>
 #include <sys/types.h>
 
