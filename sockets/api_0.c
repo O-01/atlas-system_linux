@@ -37,6 +37,7 @@ int main(void)
 		printf("Raw request: \"%s\"\n", data_buf);
 		sscanf(data_buf, "%s %s %s", meth, path, vers);
 		printf("Method: %s\nPath: %s\nVersion: %s\n", meth, path, vers);
+		fflush(stdout);
 		send(in, "HTTP/1.1 200 OK\r\n\r\n", 23, MSG_NOSIGNAL);
 		close(in);
 	}
