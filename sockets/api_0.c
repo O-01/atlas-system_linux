@@ -10,7 +10,6 @@ int main(void)
 	socklen_t size = sizeof(struct sockaddr_in);
 	struct sockaddr_in info, peer_info;
 	char data_buf[4096], meth[32], path[4096], vers[32];
-	/* char *reply = "200 OK"; */
 	ssize_t recvd = 0;
 
 	sock = socket(PF_INET, SOCK_STREAM, 0);
