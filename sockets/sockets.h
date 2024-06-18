@@ -1,11 +1,12 @@
 #ifndef _SOCKETS_H_
 #define _SOCKETS_H_
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+
+#include <linux/limits.h>
 
 #include <sys/socket.h>
 #include <sys/types.h>
