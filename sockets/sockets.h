@@ -3,8 +3,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
+
+#include <linux/limits.h>
 
 #include <sys/socket.h>
 #include <sys/types.h>
@@ -18,8 +19,21 @@
 
 #include <netdb.h>
 
+#ifndef __USE_MISC
+#define __USE_MISC
+#endif
+
+#include <string.h>
+
+typedef struct sockaddr_in sockaddr_in_t;
+typedef struct sockaddr sockaddr_t;
+
+#define RESP_200_V "HTTP/1.1 200 OK\r\n\r\n"
+
 /* #include <stddef.h> */
 /* #include <sys/un.h> */
 /* #include <net/if.h> */
+
+int socket_init_in(int sock, sockaddr_in_t *info);
 
 #endif
