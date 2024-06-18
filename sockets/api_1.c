@@ -40,6 +40,10 @@ int main(void)
 	return (EXIT_SUCCESS);
 }
 
+/**
+ * query_parse - parse path query variables & print keys/values
+ * @quer: input string containing possible variables
+ */
 static void query_parse(char *quer)
 {
 	int iter = 0, added = 0;
@@ -53,8 +57,9 @@ static void query_parse(char *quer)
 
 	for (iter = 0; keyvals[iter]; ++iter)
 	{
-		if (!sscanf(keyvals[iter], "%[^=]=%s", key, val))
+		if (sscanf(keyvals[iter], "%[^=]=%s", key, val) > 0)
+			printf("Query: \"%s\" -> \"%s\"\n", key, val);
+		else
 			break;
-		printf("Query: \"%s\" -> \"%s\"\n", key, val);
 	}
 }
