@@ -1,6 +1,6 @@
 #include "sockets.h"
 
-static void header_parse(char *head);
+static void query_parse(char *quer);
 
 /**
  * main - entry point of program
@@ -11,7 +11,7 @@ int main(void)
 	int sock, in;
 	socklen_t size = sizeof(sockaddr_in_t);
 	sockaddr_in_t info, peer_info;
-	char data_buf[BUFSIZ], profil[PATH_MAX], header[2048];
+	char data_buf[BUFSIZ], body[BUFSIZ], path[PATH_MAX];
 	ssize_t recvd = 0;
 
 	sock = socket_init_in(8080, &info);
@@ -30,10 +30,10 @@ int main(void)
 		if (recvd == -1)
 			perror("recv"), exit(EXIT_FAILURE);
 		printf("Raw request: \"%s\"\n", data_buf);
-		if (sscanf(data_buf, "%[^\r\n]%*[\r\n]%[^\b]", profil, header) > 0)
-			/* printf("profile: %s\n", profile), */
-			/* printf(LINE "HEADERS:\n%s" LINE, header), */
-			header_parse(header);
+		if (sscanf(data_buf, "%*s %s %*[^\r\n]%*[\r\n]%[^\b]", path, body) > 0)
+			/* printf("Body:\n%s\n" LINE, body), */
+			printf("Path: %s\n", path);
+		query_parse(body);
 		fflush(stdout);
 		send(in, RESP_200_V, strlen(RESP_200_V), MSG_NOSIGNAL);
 		close(in);
@@ -42,21 +42,34 @@ int main(void)
 }
 
 /**
- * header_parse - parse HTTP request headers & print keys/values
- * @head: input string containing possible variables
+ * query_parse - parse path query variables & print keys/values
+ * @quer: input string containing possible variables
  */
-static void header_parse(char *head)
+static void query_parse(char *quer)
 {
-	int iter = 0, added = 0;
-	char *extract = NULL, *keyvals[128] = {0}, key[128], val[128];
+	int iter = 0, parsed = 0, added = 0;
+	char *extract = NULL, *body = NULL, *temp[32] = {0};
+	char *keyvals[32] = {0}, key[128], val[128];
 
 	do {
-		extract = strsep(&head, CRLF);
+		extract = strsep(&quer, CRLF);
 		if (extract)
+			temp[iter++] = extract,
+			parsed = 1;
+	} while (extract && parsed--);
+	body = temp[iter - 1];
+	iter = 0;
+	do {
+		extract = strsep(&body, "&");
+		if (extract && extract[0])
 			keyvals[iter++] = extract,
 			added = 1;
 	} while (extract && added--);
 	for (iter = 0; keyvals[iter]; ++iter)
-		if (sscanf(keyvals[iter], "%[^:]: %s", key, val) > 0)
-			printf("Header: \"%s\" -> \"%s\"\n", key, val);
+	{
+		if (sscanf(keyvals[iter], "%[^=]=%s", key, val) > 0)
+			printf("Body param: \"%s\" -> \"%s\"\n", key, val);
+		else
+			break;
+	}
 }
