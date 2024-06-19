@@ -28,16 +28,73 @@
 typedef struct sockaddr_in sockaddr_in_t;
 typedef struct sockaddr sockaddr_t;
 
+#define TO_STR(x) #x
+#define STR(x) TO_STR(x)
+#define LEN(x) strlen(x)
+
 #define CRLF "\r\n"
 #define DOPPEL "\r\n\r\n"
 #define LINE "------------------------------------------------------------\n"
 
+#define RESP_200 "200 OK"
+#define RESP_201 "201 Created"
+#define RESP_404 "404 Not Found"
+#define RESP_411 "411 Length Required"
+#define RESP_422 "422 Unprocessable Entity"
+
+#define VERSER "HTTP/1.1"
+
 #define RESP_200_V "HTTP/1.1 200 OK" DOPPEL
+#define RESP_201_V VERSER " " RESP_201
+#define RESP_404_V VERSER " " RESP_404 DOPPEL
+#define RESP_411_V VERSER " " RESP_411 DOPPEL
+#define RESP_422_V VERSER " " RESP_422 DOPPEL
+
+#define CONTENTLEN "Content-Length"
+
+#define CONTENTTYPE_JSON "Content-Type: application/json"
+
+#define RESP_201_1 RESP_201_V CRLF CONTENTLEN ": "
+#define RESP_201_2 CRLF CONTENTTYPE_JSON DOPPEL
+
+#define CRLF_LEN 2
+#define DOPPEL_LEN 4
+
+#define RESPLEN_201(l, json) (\
+	LEN(RESP_201_V) + CRLF_LEN +\
+	LEN(CONTENTLEN) + LEN(": ") + LEN(STR(l)) + CRLF_LEN +\
+	LEN(CONTENTTYPE_JSON) + DOPPEL_LEN +\
+	LEN(json))
 
 /* #include <stddef.h> */
 /* #include <sys/un.h> */
 /* #include <net/if.h> */
 
+typedef struct to_do
+{
+	size_t id;
+	char *title;
+	char *description;
+	struct to_do *next;
+	struct to_do *prev;
+} todo_t;
+
+typedef struct to_do_list
+{
+	size_t count;
+	struct to_do *head;
+	struct to_do *tail;
+} todolist_t;
+
+extern todolist_t *todos;
+extern int status;
+
 int socket_init_in(int sock, sockaddr_in_t *info);
+int todo_init(void);
+int add_todo(char *title, char *description);
+int insert_todo(todo_t *todo);
+void sender_closer(int sock_fd, char *ip, char *meth, char *path);
+char *added_json(void);
+char *number_toa(size_t number);
 
 #endif
