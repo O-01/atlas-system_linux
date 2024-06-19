@@ -28,7 +28,11 @@
 typedef struct sockaddr_in sockaddr_in_t;
 typedef struct sockaddr sockaddr_t;
 
-#define RESP_200_V "HTTP/1.1 200 OK\r\n\r\n"
+#define CRLF "\r\n"
+#define DOPPEL "\r\n\r\n"
+#define LINE "------------------------------------------------------------\n"
+
+#define RESP_200_V "HTTP/1.1 200 OK"DOPPEL
 
 /* #include <stddef.h> */
 /* #include <sys/un.h> */
