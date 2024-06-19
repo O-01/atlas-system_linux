@@ -11,7 +11,7 @@ int main(void)
 	int sock, in;
 	socklen_t size = sizeof(sockaddr_in_t);
 	sockaddr_in_t info, peer_info;
-	char data_buf[BUFSIZ], profil[PATH_MAX], header[1024];
+	char data_buf[BUFSIZ], profil[PATH_MAX], header[2048];
 	ssize_t recvd = 0;
 
 	sock = socket_init_in(8080, &info);
@@ -30,7 +30,7 @@ int main(void)
 		if (recvd == -1)
 			perror("recv"), exit(EXIT_FAILURE);
 		printf("Raw request: \"%s\"\n", data_buf);
-		if (sscanf(data_buf, "%[^\r\n]%*[\r\n]%[^DOPPEL]", profil, header) > 0)
+		if (sscanf(data_buf, "%[^\r\n]%*[\r\n]%[^CRLF]", profil, header) > 0)
 			/* printf("profile: %s\n", profile), */
 			/* printf(LINE "HEADERS:\n%s" LINE, header), */
 			header_parse(header);
@@ -48,12 +48,13 @@ int main(void)
 static void header_parse(char *head)
 {
 	int iter = 0, added = 0;
-	char *extract = NULL, *keyvals[32] = {0}, key[128], val[128];
+	char *extract = NULL, *keyvals[128] = {0}, key[128], val[128];
 
 	do {
 		extract = strsep(&head, CRLF);
 		if (extract)
-			keyvals[iter++] = extract, added = 1;
+			keyvals[iter++] = extract,
+			added = 1;
 	} while (extract && added--);
 
 	for (iter = 0; keyvals[iter]; ++iter)
@@ -61,5 +62,4 @@ static void header_parse(char *head)
 		if (sscanf(keyvals[iter], "%[^:]: %s", key, val) > 0)
 			printf("Header: \"%s\" -> \"%s\"\n", key, val);
 	}
-
 }
