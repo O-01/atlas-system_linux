@@ -122,7 +122,7 @@ static int header_parse(char *headers)
 		}
 	body = keyvals[iter - 1];
 	if (haslen && body)
-		return (query_parse(body));
+		return (body_parse(body));
 	return (411);
 }
 
