@@ -35,7 +35,7 @@ int main(void)
 			/* printf(LINE "HEADERS:\n%s" LINE, header), */
 			header_parse(header);
 		fflush(stdout);
-		send(in, RESP_200_V, strlen(RESP_200_V), MSG_NOSIGNAL);
+		send(in, RESP_200_V DOPPEL, LEN(RESP_200_V) + DOPPEL_LEN, MSG_NOSIGNAL);
 		close(in);
 	}
 	return (EXIT_SUCCESS);

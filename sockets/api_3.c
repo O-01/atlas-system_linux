@@ -31,11 +31,10 @@ int main(void)
 			perror("recv"), exit(EXIT_FAILURE);
 		printf("Raw request: \"%s\"\n", data_buf);
 		if (sscanf(data_buf, "%*s %s %*[^\r\n]%*[\r\n]%[^\b]", path, body) > 0)
-			/* printf("Body:\n%s\n" LINE, body), */
 			printf("Path: %s\n", path);
 		query_parse(body);
 		fflush(stdout);
-		send(in, RESP_200_V, strlen(RESP_200_V), MSG_NOSIGNAL);
+		send(in, RESP_200_V DOPPEL, LEN(RESP_200_V) + DOPPEL_LEN, MSG_NOSIGNAL);
 		close(in);
 	}
 	return (EXIT_SUCCESS);

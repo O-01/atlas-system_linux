@@ -86,14 +86,17 @@ void sender_closer(int sock_fd, char *ip, char *meth, char *path)
 	{
 		case 200:
 			printf(RESP_200 "\n");
-			send(sock_fd, RESP_200_V, strlen(RESP_200_V), MSG_NOSIGNAL);
+			json = all_todos();
+			sprintf(created, RESP_200_1 "%lu" RESP_200_2 "%s", LEN(json), json);
+			free(json), json = NULL;
+			send(sock_fd, created, LEN(created) + 1, MSG_NOSIGNAL);
 			break;
 		case 201:
 			printf(RESP_201 "\n");
 			json = added_json();
 			sprintf(created, RESP_201_1 "%lu" RESP_201_2 "%s", LEN(json), json);
 			free(json), json = NULL;
-			send(sock_fd, created, LEN(created) + 128, MSG_NOSIGNAL);
+			send(sock_fd, created, LEN(created) + 1, MSG_NOSIGNAL);
 			break;
 		case 404:
 			printf(RESP_404 "\n");
@@ -127,6 +130,35 @@ char *added_json(void)
 	strcat(data, todo->description);
 	strcat(data, "\"}");
 
+	json = calloc(1, sizeof(char) * LEN(data) + 1);
+	if (!json)
+		return ("");
+	memcpy(json, data, LEN(data) + 1);
+	return(json);
+}
+
+char *all_todos(void)
+{
+	char data[BUFSIZ] = {0}, *json = NULL, *id = NULL;
+	todo_t *todo = NULL;
+
+	data[0] = '[';
+	data[1] = '\0';
+	for (todo = todos->head; todo; todo = todo->next)
+	{
+		strcat(data, "{\"id\":");
+		id = number_toa(todo->id);
+		strcat(data, id);
+		free(id), id = NULL;
+		strcat(data, ",\"title\":\"");
+		strcat(data, todo->title);
+		strcat(data, "\",\"description\":\"");
+		strcat(data, todo->description);
+		strcat(data, "\"}");
+		if (todo->next)
+			strcat(data, ",");
+	}
+	strcat(data, "]");
 	json = calloc(1, sizeof(char) * LEN(data) + 1);
 	if (!json)
 		return ("");

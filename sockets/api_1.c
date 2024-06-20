@@ -34,7 +34,7 @@ int main(void)
 			printf("Path: %s\n", path);
 		query_parse(quer);
 		fflush(stdout);
-		send(in, RESP_200_V, strlen(RESP_200_V), MSG_NOSIGNAL);
+		send(in, RESP_200_V DOPPEL, LEN(RESP_200_V) + DOPPEL_LEN, MSG_NOSIGNAL);
 		close(in);
 	}
 	return (EXIT_SUCCESS);

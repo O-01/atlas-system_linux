@@ -44,7 +44,7 @@ typedef struct sockaddr sockaddr_t;
 
 #define VERSER "HTTP/1.1"
 
-#define RESP_200_V "HTTP/1.1 200 OK" DOPPEL
+#define RESP_200_V VERSER " " RESP_200
 #define RESP_201_V VERSER " " RESP_201
 #define RESP_404_V VERSER " " RESP_404 DOPPEL
 #define RESP_411_V VERSER " " RESP_411 DOPPEL
@@ -53,6 +53,9 @@ typedef struct sockaddr sockaddr_t;
 #define CONTENTLEN "Content-Length"
 
 #define CONTENTTYPE_JSON "Content-Type: application/json"
+
+#define RESP_200_1 RESP_200_V CRLF CONTENTLEN ": "
+#define RESP_200_2 CRLF CONTENTTYPE_JSON DOPPEL
 
 #define RESP_201_1 RESP_201_V CRLF CONTENTLEN ": "
 #define RESP_201_2 CRLF CONTENTTYPE_JSON DOPPEL
@@ -95,6 +98,7 @@ int add_todo(char *title, char *description);
 int insert_todo(todo_t *todo);
 void sender_closer(int sock_fd, char *ip, char *meth, char *path);
 char *added_json(void);
+char *all_todos(void);
 char *number_toa(size_t number);
 
 #endif

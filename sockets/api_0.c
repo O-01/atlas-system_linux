@@ -31,7 +31,7 @@ int main(void)
 		if (sscanf(data_buf, "%s %s %s", meth, path, vers) > 0)
 			printf("Method: %s\nPath: %s\nVersion: %s\n", meth, path, vers);
 		fflush(stdout);
-		send(in, RESP_200_V, strlen(RESP_200_V), MSG_NOSIGNAL);
+		send(in, RESP_200_V DOPPEL, LEN(RESP_200_V) + DOPPEL_LEN, MSG_NOSIGNAL);
 		close(in);
 	}
 	return (EXIT_SUCCESS);

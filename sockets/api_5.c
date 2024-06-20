@@ -1,12 +1,13 @@
 #include "sockets.h"
 
-static int post_verification(char *meth);
+static int meth_verification(char *meth);
 static int path_verification(char *meth, char *expected);
 static int header_parse(char *body);
 static int query_parse(char *quer);
 
 todolist_t *todos;
 int status;
+int meth_code;
 
 /**
  * main - entry point of program
@@ -26,7 +27,7 @@ int main(void)
 	if (listen(sock, 128) == -1)
 		perror("not listening"), exit(EXIT_FAILURE);
 	printf("Server listening on port %d\n", ntohs(info.sin_port));
-	for (;; status = 0)
+	for (;; status = 0, meth_code = 0)
 	{
 		in = accept(sock, (sockaddr_t *)&info, &size);
 		if (in == -1)
@@ -37,14 +38,15 @@ int main(void)
 		recvd = recv(in, data_buf, 4096 - 1, 0);
 		if (recvd == -1)
 			perror("recv"), exit(EXIT_FAILURE);
+		/* printf("Raw request: \"%s\"\n", data_buf); */
 		if (sscanf(data_buf, "%s %s %*[^\r\n]%*[\r\n]%[^\b]", meth, path, body) == 0)
 			continue;
-		if (!post_verification(meth) || !path_verification(path, "/todos"))
+		if (!meth_verification(meth) || !path_verification(path, "/todos"))
 		{
 			status = 404, sender_closer(in, ip, meth, path);
 			continue;
 		}
-		status = header_parse(body);
+		status = meth_code == 1 ? header_parse(body) : 200;
 		sender_closer(in, ip, meth, path);
 	}
 	return (EXIT_SUCCESS);
@@ -67,9 +69,13 @@ void __attribute__((destructor)) free_todos(void)
 /**
  * post_verification -
  */
-static int post_verification(char *meth)
+static int meth_verification(char *meth)
 {
-	return (!strcmp(meth, "POST") ? 1 : 0);
+	if (!strcmp(meth, "POST"))
+		meth_code = 1;
+	else if (!strcmp(meth, "GET"))
+		meth_code = 2;
+	return (meth_code ? 1 : 0);
 }
 
 /**
