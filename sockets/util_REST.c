@@ -1,5 +1,17 @@
 #include "sockets.h"
 
+int todo_init(void);
+int add_todo(char *title, char *description);
+int insert_todo(todo_t *todo);
+void sender_closer(int sock_fd, char *ip, char *meth, char *path);
+char *added_json(void);
+char *all_todos(void);
+char *number_toa(size_t number);
+
+/**
+ * todo_init - create and initialize todo list
+ * Return: 1 upon success, 0 upon memory allocation failure
+ */
 int todo_init(void)
 {
 	todos = calloc(1, sizeof(todolist_t));
@@ -11,6 +23,12 @@ int todo_init(void)
 	return (1);
 }
 
+/**
+ * add_todo - create new todo item to be added to end of todo list
+ * @title: title for new todo item
+ * @description: description for new todo item
+ * Return: output of insert_todo (always 201)
+ */
 int add_todo(char *title, char *description)
 {
 	todo_t *todo = NULL;
@@ -37,6 +55,11 @@ int add_todo(char *title, char *description)
 	return (insert_todo(todo));
 }
 
+/**
+ * insert_todo - adds newly created todo item to end of todo list
+ * @todo: newly created todo item to be added to end of todo list
+ * Return: 201 upon success
+ */
 int insert_todo(todo_t *todo)
 {
 	todo_t *tmp = NULL;
@@ -56,6 +79,14 @@ int insert_todo(todo_t *todo)
 	return (201);
 }
 
+/**
+ * sender_closer - sends HTTP response related to request received from
+ *                 connected socket along with relevant data, as applicable
+ * @sock_fd: connected socket file descriptor
+ * @ip: IP address associated with connected socket
+ * @meth: ASCII string containing method name
+ * @path: ASCII string containing path name
+ */
 void sender_closer(int sock_fd, char *ip, char *meth, char *path)
 {
 	char created[BUFSIZ] = {0}, *json = NULL;
@@ -92,6 +123,10 @@ void sender_closer(int sock_fd, char *ip, char *meth, char *path)
 	close(sock_fd);
 }
 
+/**
+ * added_json - retrieve most recently added todo item data in JSON format
+ * Return: most recently added todo item data in JSON format
+ */
 char *added_json(void)
 {
 	char data[BUFSIZ] = {0}, *json = NULL, *id = NULL;
@@ -113,9 +148,13 @@ char *added_json(void)
 	if (!json)
 		return ("");
 	memcpy(json, data, LEN(data) + 1);
-	return(json);
+	return (json);
 }
 
+/**
+ * all_todos - retrieve all todo data in JSON format
+ * Return: all todo data in JSON format
+ */
 char *all_todos(void)
 {
 	char data[BUFSIZ] = {0}, *json = NULL, *id = NULL;
@@ -142,9 +181,14 @@ char *all_todos(void)
 	if (!json)
 		return ("");
 	memcpy(json, data, LEN(data) + 1);
-	return(json);
+	return (json);
 }
 
+/**
+ * number_toa - converts number from int to ASCII string
+ * @number: int to be converted to ASCII string
+ * Return: ASCII string version of input int
+ */
 char *number_toa(size_t number)
 {
 	int digit = 15, len = 0;

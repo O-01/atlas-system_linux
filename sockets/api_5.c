@@ -1,9 +1,9 @@
 #include "sockets.h"
 
 static int meth_verification(char *meth);
-static int path_verification(char *meth, char *expected);
-static int header_parse(char *body);
-static int query_parse(char *quer);
+static int path_verification(char *path, char *expected);
+static int header_parse(char *headers);
+static int body_parse(char *body);
 
 todolist_t *todos;
 int status;
@@ -38,7 +38,6 @@ int main(void)
 		recvd = recv(in, data_buf, 4096 - 1, 0);
 		if (recvd == -1)
 			perror("recv"), exit(EXIT_FAILURE);
-		/* printf("Raw request: \"%s\"\n", data_buf); */
 		if (sscanf(data_buf, "%s %s %*[^\r\n]%*[\r\n]%[^\b]", meth, path, body) == 0)
 			continue;
 		if (!meth_verification(meth) || !path_verification(path, "/todos"))
@@ -52,22 +51,30 @@ int main(void)
 	return (EXIT_SUCCESS);
 }
 
+/**
+ * free_todos - frees todo list data
+ */
 void __attribute__((destructor)) free_todos(void)
 {
 	todo_t *current = NULL, *next = NULL;
 
-	for (current = todos->head; current; current = next)
+	if (todos)
 	{
-		next = current->next;
-		free(current->description), current->description = NULL;
-		free(current->title), current->title = NULL;
-		free(current), current = NULL;
+		for (current = todos->head; current; current = next)
+		{
+			next = current->next;
+			free(current->description), current->description = NULL;
+			free(current->title), current->title = NULL;
+			free(current), current = NULL;
+		}
+		free(todos), todos = NULL;
 	}
-	free(todos), todos = NULL;
 }
 
 /**
- * post_verification -
+ * meth_verification - verifies that method is POST or GET and sets meth_code
+ * @meth: ASCII string containing method name
+ * Return: 1 if method is POST or GET, otherwise 0
  */
 static int meth_verification(char *meth)
 {
@@ -79,16 +86,21 @@ static int meth_verification(char *meth)
 }
 
 /**
- * post_verification -
+ * path_verification - verifies that path is recognized
+ * @path: ASCII string containing path name
+ * @expected: ASCII string containing expected or recognized path name
+ * Return: 1 if path is as expected/recognize, otherwise 0
  */
-static int path_verification(char *meth, char *expected)
+static int path_verification(char *path, char *expected)
 {
-	return (!strcmp(meth, expected) ? 1 : 0);
+	return (!strcmp(path, expected) ? 1 : 0);
 }
 
 /**
- * header_parse - parse header variables and body content
- * @body: input string containing possible variables
+ * header_parse - parse header variables and retrieve body content
+ * @headers: input string containing possible variables
+ * Return: output of body_parse (201 upon success or 422 upon failure),
+ *         otherwise 411 (Length Required)
  */
 static int header_parse(char *headers)
 {
@@ -115,17 +127,19 @@ static int header_parse(char *headers)
 }
 
 /**
- * query_parse -
- * @quer:
+ * body_parse - parse body content and add todo list item, as applicable
+ * @body: body content to be parsed
+ * Return: output of add_todo (201 upon success or 0 upon failure),
+ *         otherwise 422
  */
-static int query_parse(char *quer)
+static int body_parse(char *body)
 {
 	int iter = 0, added = 0, istitle = 0, isdesc = 0;
 	char *extract = NULL, *keyvals[32] = {0}, key[128], val[128];
 	char title[128], description[128];
 
 	do {
-		extract = strsep(&quer, "&");
+		extract = strsep(&body, "&");
 		if (extract && extract[0])
 			keyvals[iter++] = extract,
 			added = 1;
@@ -142,8 +156,6 @@ static int query_parse(char *quer)
 		else
 			break;
 	}
-	/* printf("%d %d\n", istitle, isdesc); */
-	/* printf("title: %s description: %s\n", title, description); */
 	if (istitle && isdesc)
 		return (add_todo(title, description));
 	return (422);

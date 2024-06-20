@@ -16,13 +16,11 @@
 #ifndef __USE_XOPEN2K
 #define __USE_XOPEN2K
 #endif
-
 #include <netdb.h>
 
 #ifndef __USE_MISC
 #define __USE_MISC
 #endif
-
 #include <string.h>
 
 typedef struct sockaddr_in sockaddr_in_t;
@@ -30,10 +28,13 @@ typedef struct sockaddr sockaddr_t;
 
 #define TO_STR(x) #x
 #define STR(x) TO_STR(x)
+
 #define LEN(x) strlen(x)
 
 #define CRLF "\r\n"
 #define DOPPEL "\r\n\r\n"
+
+/* FOR TESTING */
 #define LINE "------------------------------------------------------------\n"
 
 #define RESP_200 "200 OK"
@@ -55,14 +56,15 @@ typedef struct sockaddr sockaddr_t;
 #define CONTENTTYPE_JSON "Content-Type: application/json"
 
 #define RESP_200_1 RESP_200_V CRLF CONTENTLEN ": "
-#define RESP_200_2 CRLF CONTENTTYPE_JSON DOPPEL
+#define RESP_200_2 CRLF CONTENTTYPE_JSON "" DOPPEL
 
 #define RESP_201_1 RESP_201_V CRLF CONTENTLEN ": "
-#define RESP_201_2 CRLF CONTENTTYPE_JSON DOPPEL
+#define RESP_201_2 CRLF CONTENTTYPE_JSON "" DOPPEL
 
 #define CRLF_LEN 2
 #define DOPPEL_LEN 4
 
+/* NO LONGER USED - KEPT FOR REFERENCE */
 #define RESPLEN_201(l, json) (\
 	LEN(RESP_201_V) + CRLF_LEN +\
 	LEN(CONTENTLEN) + LEN(": ") + LEN(STR(l)) + CRLF_LEN +\
@@ -73,6 +75,14 @@ typedef struct sockaddr sockaddr_t;
 /* #include <sys/un.h> */
 /* #include <net/if.h> */
 
+/**
+ * struct to_do - todo list item data (doubly-linked list node)
+ * @id: todo list item id
+ * @title: todo list item title
+ * @description: todo list item description
+ * @next: pointer to next todo list item - NULL if item is only/last todo
+ * @prev: pointer to previous todo list item - NULL if item is first todo
+ */
 typedef struct to_do
 {
 	size_t id;
@@ -82,6 +92,12 @@ typedef struct to_do
 	struct to_do *prev;
 } todo_t;
 
+/**
+ * struct to_do_list - todo list data (doubly-linked list container)
+ * @count: count of todo list items
+ * @head: first item in todo list
+ * @tail: last item in todo list
+ */
 typedef struct to_do_list
 {
 	size_t count;
