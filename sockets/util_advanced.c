@@ -3,6 +3,8 @@
 void sender_closer_adv(int sock_fd, char *ip, char *meth, char *path);
 char *req_todo(size_t requested_id);
 todo_t *find_id(size_t id);
+int delete_todo(size_t requested_id);
+void nullify(char *string);
 
 /**
  * sender_closer_adv - sends HTTP response related to request received from
@@ -33,13 +35,17 @@ void sender_closer_adv(int sock_fd, char *ip, char *meth, char *path)
 			free(json), json = NULL;
 			send(sock_fd, created, LEN(created) + 1, MSG_NOSIGNAL);
 			break;
+		case 204:
+			printf(RESP_204 "\n");
+			send(sock_fd, RESP_204_V, LEN(RESP_204_V), MSG_NOSIGNAL);
+			break;
 		case 404:
 			printf(RESP_404 "\n");
-			send(sock_fd, RESP_404_V, strlen(RESP_404_V), MSG_NOSIGNAL);
+			send(sock_fd, RESP_404_V, LEN(RESP_404_V), MSG_NOSIGNAL);
 			break;
 		case 422:
 			printf(RESP_422 "\n");
-			send(sock_fd, RESP_422_V, strlen(RESP_422_V), MSG_NOSIGNAL);
+			send(sock_fd, RESP_422_V, LEN(RESP_422_V), MSG_NOSIGNAL);
 			break;
 		default:
 			break;
@@ -90,4 +96,53 @@ todo_t *find_id(size_t id)
 		if (current->id == id)
 			return (current);
 	return (NULL);
+}
+
+/**
+ * delete_todo - deletes todo list item and frees associated memory
+ * @requested_id: id corresponding to todo item to be deleted
+ * Return: always 204
+ */
+int delete_todo(size_t requested_id)
+{
+	todo_t *current = find_id(requested_id);
+
+	printf("Rollin'\n");
+	if (current == todos->head)
+	{
+		todos->head = current->next;
+		todos->head->prev = NULL;
+		free(current->title), current->title = NULL;
+		free(current->description), current->description = NULL;
+		free(current), current = NULL;
+	}
+	else if (current != todos->head && current != todos->tail)
+	{
+		current->next->prev = current->prev;
+		current->prev->next = current->next;
+		free(current->title), current->title = NULL;
+		free(current->description), current->description = NULL;
+		free(current), current = NULL;
+	}
+	else if (current == todos->tail)
+	{
+		todos->tail = current->prev;
+		todos->tail->next = NULL;
+		free(current->title), current->title = NULL;
+		free(current->description), current->description = NULL;
+		free(current), current = NULL;
+	}
+	return (204);
+}
+
+/**
+ * nullify - set non-NULL bytes of input string to NULL
+ * @string: string to be nullified
+ */
+void nullify(char *string)
+{
+	int iter = 0;
+
+	for (iter = 0; string[iter]; ++iter)
+		string[iter] = '\0';
 }

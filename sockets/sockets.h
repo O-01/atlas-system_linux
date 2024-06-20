@@ -40,6 +40,7 @@ typedef struct sockaddr sockaddr_t;
 
 #define RESP_200 "200 OK"
 #define RESP_201 "201 Created"
+#define RESP_204 "204 No Content"
 #define RESP_404 "404 Not Found"
 #define RESP_411 "411 Length Required"
 #define RESP_422 "422 Unprocessable Entity"
@@ -48,6 +49,7 @@ typedef struct sockaddr sockaddr_t;
 
 #define RESP_200_V VERSER " " RESP_200
 #define RESP_201_V VERSER " " RESP_201
+#define RESP_204_V VERSER " " RESP_204 DOPPEL
 #define RESP_404_V VERSER " " RESP_404 DOPPEL
 #define RESP_411_V VERSER " " RESP_411 DOPPEL
 #define RESP_422_V VERSER " " RESP_422 DOPPEL
@@ -122,9 +124,11 @@ char *added_json(void);
 char *all_todos(void);
 char *number_toa(size_t number);
 
-/* advanced.c */
+/* util_advanced.c */
 void sender_closer_adv(int sock_fd, char *ip, char *meth, char *path);
 char *req_todo(size_t requested_id);
 todo_t *find_id(size_t id);
+int delete_todo(size_t requested_id);
+void nullify(char *string);
 
 #endif

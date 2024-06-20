@@ -1,6 +1,7 @@
 #include "sockets.h"
 
 static int meth_verification(char *meth);
+static int only_path(char *base, char *expected);
 static int path_verification(char *base, char *quer, char *expected);
 static int header_parse(char *headers);
 static int body_parse(char *body);
@@ -44,7 +45,8 @@ int main(void)
 			continue;
 		if (sscanf(path, "%[^?]?%s", base, quer) == 0)
 			continue;
-		if (!meth_verification(meth) || !path_verification(base, quer, "/todos"))
+		if (meth_verification(meth) == 404 ||
+			only_path(base, "/todos") == 404)
 		{
 			status = 404, sender_closer_adv(in, ip, meth, base);
 			continue;
@@ -89,15 +91,31 @@ static int meth_verification(char *meth)
 		meth_code = 1;
 	else if (!strcmp(meth, "GET"))
 		meth_code = 2;
-	return (meth_code ? 1 : 0);
+	else if (!strcmp(meth, "DELETE"))
+		meth_code = 3;
+	return (meth_code ? 1 : 404);
 }
 
 /**
- * path_verification - verifies that path is recognized
+ * only_path - ONLY verifies that path is recognized
+ * @base: ASCII string containing path name
+ * @expected: ASCII string containing expected or recognized path name
+ * Return: 1 if path is as expected/recognize, otherwise 404
+ */
+static int only_path(char *base, char *expected)
+{
+	return (!strcmp(base, expected) ? 1 : 404);
+}
+
+/**
+ * path_verification - verifies that path is recognized, calling query parse if
+ *                     queries exist
  * @base: ASCII string containing path name
  * @quer: ASCII string containing any queries, may be NULL or zero length
  * @expected: ASCII string containing expected or recognized path name
- * Return: 1 if path is as expected/recognize, otherwise 0
+ * Return: output of query_parse if path is as expected/recognized and there
+ *         are queries, 200 if path is as expected/recognize and there are no
+ *         queries, otherwise 404
  */
 static int path_verification(char *base, char *quer, char *expected)
 {
@@ -105,7 +123,7 @@ static int path_verification(char *base, char *quer, char *expected)
 
 	if (!strcmp(base, expected))
 		valid = 1;
-	return (valid && LEN(quer) ? query_parse(quer) : valid ? 200 : 0);
+	return (valid && LEN(quer) ? query_parse(quer) : valid ? 200 : 404);
 }
 
 /**
@@ -176,7 +194,9 @@ static int body_parse(char *body)
 /**
  * query_parse - parse path query variables & print keys/values
  * @quer: input string containing possible variables
- * Return: 200 if query contains valid/existing todo item id, otherwise 404
+ * Return: output of delete_todo if method is DELETE and query contains
+ *         valid/existing todo item id, 200 if query contains
+ *         valid/existing todo item id and method is not DELETE, otherwise 404
  */
 static int query_parse(char *quer)
 {
@@ -199,7 +219,8 @@ static int query_parse(char *quer)
 		else
 			break;
 	}
+	printf("has_id: %d\n", has_id);
 	if (has_id && find_id(req_id))
-		return (200);
+		return (meth_code == 3 ? delete_todo(req_id) : 200);
 	return (404);
 }

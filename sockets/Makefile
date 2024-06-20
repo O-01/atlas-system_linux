@@ -26,5 +26,8 @@ todo_api_5: api_5.c $(UTIL) $(UTIL_REST)
 todo_api_6: api_6.c $(UTIL) $(UTIL_REST) $(UTIL_ADV)
 	@$(CC) $(CFLAGS) $^ -o $@
 
+todo_api_7: api_7.c $(UTIL) $(UTIL_REST) $(UTIL_ADV)
+	@$(CC) $(CFLAGS) $^ -o $@
+
 clean:
 	@$(RM) -f todo_api_*
