@@ -6,6 +6,7 @@
 #include <unistd.h>
 
 #include <linux/limits.h>
+#include <limits.h>
 
 #include <sys/socket.h>
 #include <sys/types.h>
@@ -107,6 +108,7 @@ typedef struct to_do_list
 
 extern todolist_t *todos;
 extern int status;
+extern size_t req_id;
 
 /* util.c */
 int socket_init_in(int sock, sockaddr_in_t *info);
@@ -119,5 +121,10 @@ void sender_closer(int sock_fd, char *ip, char *meth, char *path);
 char *added_json(void);
 char *all_todos(void);
 char *number_toa(size_t number);
+
+/* advanced.c */
+void sender_closer_adv(int sock_fd, char *ip, char *meth, char *path);
+char *req_todo(size_t requested_id);
+todo_t *find_id(size_t id);
 
 #endif
