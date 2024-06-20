@@ -92,7 +92,10 @@ typedef struct to_do_list
 extern todolist_t *todos;
 extern int status;
 
+/* util.c */
 int socket_init_in(int sock, sockaddr_in_t *info);
+
+/* util_REST.c */
 int todo_init(void);
 int add_todo(char *title, char *description);
 int insert_todo(todo_t *todo);
