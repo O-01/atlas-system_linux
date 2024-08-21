@@ -1,18 +1,16 @@
 # C - ELF: nm/objdump
 ## Resources
-Read or watch:
+#### Read or watch:
 - [ELF Wikipedia](https://en.wikipedia.org/wiki/Executable_and_Linkable_Format)
 - [ELF](https://stevens.netmeister.org/631/elf.html)
 - [The ELF Object File Format: Introduction](https://www.linuxjournal.com/article/1059)
 - [The ELF Object File Format by Dissection](https://www.linuxjournal.com/article/1060)
-
-man or help:
+#### man or help:
 - `elf (5)`
 - `nm (1)`
 - `objdump (1)`
-
 ## Learning Objectives
-At the end of this project, you are expected to be able to explain to anyone, without the help of Google:
+At the end of this project, you are expected to be able to [explain to anyone](https://fs.blog/feynman-learning-technique/), **without the help of Google**:
 ### General
 - What is the ELF format
 - What are the commands `nm` and `objdump`
@@ -20,36 +18,33 @@ At the end of this project, you are expected to be able to explain to anyone, wi
 - How to parse the content of an `ELF` file
 - What information can be extracted from an `ELF` file
 - What are the differences between `nm` and `objdump`
-
 ## Requirements
 ### General
 - Allowed editors: `vi`, `vim`, `emacs`
 - All your files will be compiled on Ubuntu 14.04 LTS
 - Your C programs and functions will be compiled with `gcc 4.8.4` using the flags `-Wall` `-Werror` `-Wextra` and `-pedantic`
 - All your files should end with a new line
-- A README.md file, at the root of the folder of the project, is mandatory
+- A `README.md` file, at the root of the folder of the project, is mandatory
 - Your code should use the `Betty` style. It will be checked using [betty-style.pl](https://github.com/hs-hq/Betty/blob/main/betty-style.pl) and [betty-doc.pl](https://github.com/hs-hq/Betty/blob/main/betty-doc.pl)
 - You are not allowed to have more than 5 functions per file
 - All your header files should be include guarded
-
 ### Allowed Functions and System Calls
 - Unless specified otherwise, you are allowed to use the C standard library
 - You’re not allowed to use `system`(3)
 - You’re not allowed to use `exec*`(2 and 3)
-
 ### Compilation
 - You have to provide a `Makefile` in order to compile each task
 - Make sure each task compiles on `Ubuntu 14.04 LTS`, with `gcc 4.8.4`
 - You must compile each task using the flags `-Wall` `-Werror` `-Wextra` and `-pedantic`
-
 ### Tests
 - Your program must be able to handle both 32-bit and 64-bit ELF files
 - Your program must be able to handle both little and big endian ELF files
 - Your program must be able to handle all types of ELF files
-
-### More Info
+## More Info
 See also `/usr/include/elf.h`
-## **0. nm -p**
+#
+## Tasks
+#### 0. nm -p
 Write a program that reproduces the GNU nm command
 - Usage: `hnm [objfile ...]`
 - The output should be the exact same as `nm -p`
@@ -134,12 +129,13 @@ alex@~/nm_objdump$ ./hnm elf_files/netbsd32
 080485b8 T _rtld_setup
 alex@~/nm_objdump$
 ```
-**Repo:**
+#
+#### Repo:
 - GitHub repository: `atlas-system_linux`
 - Directory: `nm_objdump`
 - File: `Makefile`
-
-## **1. objdump -sf**
+#
+#### 1. objdump -sf
 Write a program that reproduces the GNU `objdump` command
 - Usage: `hobjdump [objfile ...]`
 - The output should be the exact same as `objdump -sf`
@@ -374,26 +370,31 @@ Contents of section .comment:
 0030 36303900                             609.            
 alex@~/nm_objdump$ 
 ```
-**Repo:**
+#
+#### Repo:
 - GitHub repository: `atlas-system_linux`
 - Directory: `nm_objdump`
 - File: `Makefile`
-
-## 2. Blog post
-Write a blog post about the ELF format
+#
+#### 2. Blog post
+Write a blog post about the `ELF` format
 
 Your blog post should cover the following:
-- What is ELF
+- What is `ELF`
 - Why it is used
 - What information is stored in it
 - How this information is stored
 - How to parse this information
-- Describe the readelf command
-- Describe the nm command
-- Describe the objdump command
+- Describe the `readelf` command
+- Describe the `nm` command
+- Describe the `objdump` command
 
-Your posts should have examples and at least one picture, at the top. Publish your blog post on Medium or LinkedIn, and share it at least on Twitter and LinkedIn.
+Your posts should have examples and at least one picture, at the top. Publish your blog post on `Medium` or `LinkedIn`, and share it at least on `Twitter` and `LinkedIn`.
 
 When done, please add all urls below (blog post, tweet, etc.)
 
 Please, remember that these blogs must be written in English to further your technical ability in a variety of settings.
+#
+#### Repo:
+- GitHub repository: `atlas-system_linux`
+#
