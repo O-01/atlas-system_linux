@@ -11,8 +11,7 @@ For this project, we expect you to look at these concepts:
 - `strace`
 - `ptrace`
 ### Learning Objectives
-
-At the end of this project, you are expected to be able to explain to anyone, without the help of Google:
+At the end of this project, you are expected to be able to [explain to anyone](https://fs.blog/feynman-learning-technique/), **without the help of Google**:
 #### General
 - What is strace, and what is its purpose
 - What is ptrace, and what possibilties it offers
@@ -20,7 +19,6 @@ At the end of this project, you are expected to be able to explain to anyone, wi
 - How to read from and/or write to the memory of a process being traced
 ### Requirements
 #### General
-
 - Allowed editors: `vi`, `vim`, `emacs`
 - All your files will be compiled on Ubuntu 14.04 LTS
 - Your programs and functions will be compiled with `gcc 4.8.4` using the flags `-Wall` `-Werror` `-Wextra` and `-pedantic`
@@ -91,6 +89,7 @@ Holberton
 231
 alex@~/strace$
 ```
+#
 #### Repo:
 - GitHub repository: `atlas-system_linux`
 - Directory: `strace`
@@ -147,6 +146,7 @@ close
 exit_group
 alex@~/strace$
 ```
+#
 #### Repo:
 - GitHub repository: `atlas-system_linux`
 - Directory: `strace`
@@ -204,6 +204,7 @@ close = 0
 exit_group = ?
 alex@~/strace$
 ```
+#
 #### Repo:
 - GitHub repository: `atlas-system_linux`
 - Directory: `strace`
@@ -265,6 +266,7 @@ close(0x2) = 0
 exit_group(0) = ?
 alex@~/strace$
 ```
+#
 #### Repo:
 - GitHub repository: `atlas-system_linux`
 - Directory: `strace`
@@ -323,6 +325,7 @@ close(0x2) = 0
 exit_group(0) = ?
 alex@~/strace$
 ```
+#
 #### Repo:
 - GitHub repository: `atlas-system_linux`
 - Directory: `strace`
@@ -388,6 +391,7 @@ close(2) = 0
 exit_group(0) = ?
 alex@~/strace$
 ```
+#
 #### Repo:
 - GitHub repository: `atlas-system_linux`
 - Directory: `strace`
@@ -445,6 +449,7 @@ close(2) = 0
 exit_group(0) = ?
 alex@~/strace$
 ```
+#
 #### Repo:
 - GitHub repository: `atlas-system_linux`
 - Directory: `strace`
@@ -502,6 +507,7 @@ close(2) = 0
 exit_group(0) = ?
 alex@~/strace$
 ```
+#
 #### Repo:
 - GitHub repository: `atlas-system_linux`
 - Directory: `strace`
@@ -558,6 +564,7 @@ close(2) = 0
 exit_group(0) = ?
 alex@~/strace$
 ```
+#
 #### Repo:
 - GitHub repository: `atlas-system_linux`
 - Directory: `strace`
