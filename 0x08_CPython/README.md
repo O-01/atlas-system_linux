@@ -14,7 +14,8 @@
 - n * log(n) -> `O(nlog(n))`
 - Please use the “short” notation (don’t use constants)
 - All your answers files must have an empty line at the end
-## 0. Lists big O
+## Tasks
+#### 0. Lists big O
 Write the big O notations for the following lists operations (one per line, in this exact order):
 - L1 - Assigning. Example: `holberton[98] = 402`
 - L2 - Appending. Example: `holberton.append(98)`
@@ -28,13 +29,13 @@ Write the big O notations for the following lists operations (one per line, in t
 - L10 - Sorting the list. Example: `holberton.sort()`
 - L11 - Reversing the list. Example: `holberton.reverse()`
 - L12 - Deleting the list. Example: `del holberton`
-
-Repo:
+#
+#### Repo:
 - GitHub repository: `atlas-system_linux`
 - Directory: `0x08_CPython`
 - File: `0-python_lists_bigO`
-
-## 1. CPython #0: Python lists
+#
+#### 1. CPython #0: Python lists
 CPython is the reference implementation of the Python programming language. Written in C, CPython is the default and most widely used implementation of the language.
 Since we now know a bit of C, we can look at what is happening under the hood of Python. Let’s have fun with Python and C, and let’s look at what makes Python so easy to use.
 
@@ -49,7 +50,6 @@ Create a C function that prints some basic info about Python lists.
     - object.h
     - [Common Object Structures](https://docs.python.org/3.4/c-api/structures.html)
     - [List Objects](https://docs.python.org/3.4/c-api/list.html)
-
 ```
 julien@ubuntu:~/CPython$ gcc -Wall -Werror -Wextra -pedantic -std=c99 -shared -Wl,-soname,PyList -o libPyList.so -fPIC -I/usr/include/python3.4 1-python.c
 julien@ubuntu:~/CPython$ cat 1-test_lists.py 
@@ -118,13 +118,13 @@ Element 2: int
 Element 3: int
 julien@CPython:~/CPython$ 
 ```
-
-Repo:
+#
+#### Repo:
 - GitHub repository: `atlas-system_linux`
 - Directory: `0x08_CPython`
 - File: `1-python.c`
-
-## 2. CPython #1: PyBytesObject
+#
+#### 2. CPython #1: PyBytesObject
 Create two C functions that print some basic info about Python lists and Python bytes objects.
 
 Python lists:
@@ -147,7 +147,6 @@ About:
     - `PyList_GetItem`
     - `PyBytes_AS_STRING`
     - `PyBytes_GET_SIZE`
-
 ```
 julien@ubuntu:~/CPython$ python3 --version
 Python 3.4.3
@@ -267,12 +266,13 @@ Element 0: str
   [ERROR] Invalid Bytes Object
 julien@ubuntu:~/CPython$ 
 ```
-Repo:
+#
+#### Repo:
 - GitHub repository: `atlas-system_linux`
 - Directory: `0x08_CPython`
 - File: `2-python.c`
-
-## 3. CPython #2: PyFloatObject
+#
+#### 3. CPython #2: PyFloatObject
 Create three C functions that print some basic info about Python lists, Python bytes an Python float objects.
 
 Python lists:
@@ -478,12 +478,13 @@ Element 7: float
   [ERROR] Invalid List Object
 julien@ubuntu:~/CPython$
 ```
-Repo:
+#
+#### Repo:
 - GitHub repository: `atlas-system_linux`
 - Directory: `0x08_CPython`
 - File: `3-python.c`
-
-## 4. CPython #3: Python Strings
+#
+#### 4. CPython #3: Python Strings
 Create a function that prints Python strings.
 - Prototype: `void print_python_string(PyObject *p);`
 - Format: see example
@@ -544,12 +545,13 @@ julien@ubuntu:~/0x07. Pyhton Strings$ python3 ./4-tests.py
   [ERROR] Invalid String Object
 julien@ubuntu:~/0x07. Pyhton Strings$ 
 ```
-Repo:
+#
+#### Repo:
 - GitHub repository: `atlas-system_linux`
 - Directory: `0x08_CPython`
 - File: `4-python.c`
-
-## 5. CPython Integers
+#
+#### 5. CPython Integers
 Create a C function that prints Python integers.
 - Prototype: `void print_python_int(PyObject *p);`
 - Format: see example
@@ -615,12 +617,13 @@ C unsigned long int overflow
 Invalid Int Object
 julien@ubuntu:~/Python Integers$ 
 ```
-Repo:
+#
+#### Repo:
 - GitHub repository: `atlas-system_linux`
 - Directory: `0x08_CPython`
 - File: `5-python.c`
-
-## 6. CPython Integers (ADVANCED)
+#
+#### 6. CPython Integers (ADVANCED)
 Create a C function that prints Python integers.
 - Prototype: `void print_python_int(PyObject *p);`
 - Format: see example
@@ -687,7 +690,9 @@ julien@ubuntu:~/Python Integers$ python3 100-tests.py
 -1111111111222222222233333333334444444444555555555566666666667777777777888888888899999999990000000000
 julien@ubuntu:~/Python Integers$ 
 ```
-Repo:
+#
+#### Repo:
 - GitHub repository: `atlas-system_linux`
 - Directory: `0x08_CPython`
 - File: `100-python.c`
+#
